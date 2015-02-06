@@ -2,13 +2,16 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Beater.ViewModels
 {
 
     class ViewModelBase : INotifyPropertyChanged
     {
-        public event PropertyChangedEventHandler PropertyChanged;
+        protected static readonly Task nullTask = Task.Delay(0);
+
+        public virtual event PropertyChangedEventHandler PropertyChanged;
 
         internal void RaisePropertyChanged(string[] changedProperties)
         {

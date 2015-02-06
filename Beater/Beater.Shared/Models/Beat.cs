@@ -1,20 +1,75 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Text;
 
 namespace Beater.Models
 {
-    class Beat
+    class Beat : INotifyPropertyChanged, IDisposable
     {
-        public Sample.Count BeatLength { get; set; }
-        public Sample.Count Measure { get; set; }
+        public BeatTemplate Template;
 
-        public float SpeedMultiplier = 1;
+        public Beat(BeatTemplate template)
+        {
+            Template = template;
+            Template.PropertyChanged += PropertyChanged;
+        }
 
-        public Sample.Provider Original { get; set; }
+        public void Dispose()
+        {
+            Template.PropertyChanged -= PropertyChanged;
+        }
 
-        public bool[] Beats { get; set; }
+        public event PropertyChangedEventHandler PropertyChanged;
 
-        public string Id { get; set; }
+        public Sample.Count BeatLength
+        {
+            get { return Template.BeatLength; }
+            set
+            {
+                Template.BeatLength = value;
+                Template.RaisePropertyChanged("BeatLength");
+            }
+        }
+
+        public Sample.Count Measure
+        {
+            get { return Template.Measure; }
+            set
+            {
+                Template.Measure = value;
+                Template.RaisePropertyChanged("Measure");
+            }
+        }
+
+        public bool[] Beats
+        {
+            get { return Template.Beats; }
+            set
+            {
+                Template.Beats = value;
+                Template.RaisePropertyChanged("Beats");
+            }
+        }
+
+        public string Id
+        {
+            get { return Template.Id; }
+            set
+            {
+                Template.Id = value;
+                Template.RaisePropertyChanged("Id");
+            }
+        }
+
+        public int BPM
+        {
+            get { return Template.BPM; }
+            set
+            {
+                Template.BPM = value;
+                Template.RaisePropertyChanged("BPM");
+            }
+        }
     }
 }
