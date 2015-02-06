@@ -9,7 +9,12 @@ namespace Beater.ViewModels
 {
     class TrackViewModel : ViewModelBase
     {
-        internal Track track = new Track() { Name = "", Filename = "", Offset = 0, BPM = 60 };
+        Track track;
+
+        public TrackViewModel(Track model)
+        {
+            track = model;
+        }
 
         #region Model Properties
         string Name

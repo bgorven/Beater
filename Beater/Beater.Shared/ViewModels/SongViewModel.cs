@@ -115,17 +115,8 @@ namespace Beater.ViewModels
 
         private async Task AddTrack(StorageFile file)
         {
-            var provider = await Task.Run(() => new Sample.Provider(file.Path));
-            var model = new Track
-            {
-                Wave = provider,
-                BPM = BPM,
-                Filename = file.Path,
-                Name = Path.GetFileNameWithoutExtension(file.Name),
-                Length = Length.Samples(),
-                Offset = 0,
-            };
-            tracks.Add(new TrackViewModel { track = model });
+            var model = await Task.Run(() => new Track(file.Path, Length, TimeSpan.Zero, BPM));
+            tracks.Add(new TrackViewModel(model));
         }
         #endregion
     }
