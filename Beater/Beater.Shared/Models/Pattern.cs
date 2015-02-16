@@ -12,12 +12,12 @@ namespace Beater.Models
         public Pattern(PatternTemplate template)
         {
             Template = template;
-            Template.PropertyChanged += PropertyChanged;
+            Template.PropertyChanged += PropagatePropertyChanged;
         }
 
         public void Dispose()
         {
-            Template.PropertyChanged -= PropertyChanged;
+            Template.PropertyChanged -= PropagatePropertyChanged;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -78,6 +78,14 @@ namespace Beater.Models
         internal void RaiseBeatsChanged()
         {
             Template.RaisePropertyChanged("Beats");
+        }
+
+        internal void PropagatePropertyChanged(object sender, PropertyChangedEventArgs args)
+        {
+            if (PropertyChanged != null && args != null)
+            {
+                PropertyChanged(this, args);
+            }
         }
     }
 }

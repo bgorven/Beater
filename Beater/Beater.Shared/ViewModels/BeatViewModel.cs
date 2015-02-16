@@ -18,13 +18,14 @@ namespace Beater.ViewModels
         {
             model = beat;
             index = number;
-            beat.PropertyChanged += this.PropertyChanged;
+            beat.PropertyChanged += PropagatePropertyChanged;
         }
 
         private Pattern model;
         private int index;
         public long BeatLength { get { return model.BeatLength; } }
-        public bool Active
+
+        public bool Beats
         {
             get { return model.Beats[index]; }
             set
@@ -33,7 +34,5 @@ namespace Beater.ViewModels
                 model.RaiseBeatsChanged();
             }
         }
-
-        public override event PropertyChangedEventHandler PropertyChanged;
     }
 }

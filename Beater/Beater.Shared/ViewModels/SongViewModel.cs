@@ -9,6 +9,7 @@ using Windows.Storage;
 using System.IO;
 using System.Windows.Input;
 using System.Linq;
+using Windows.ApplicationModel;
 
 namespace Beater.ViewModels
 {
@@ -48,6 +49,9 @@ namespace Beater.ViewModels
         }
         #endregion
 
+        /// <summary>
+        /// Creates sample data for testing/editor
+        /// </summary>
         public SongViewModel()
         {
             PlayCommand = new Command(CanPlay, Play);
@@ -58,9 +62,11 @@ namespace Beater.ViewModels
 
             Tracks = new ObservableCollection<TrackViewModel>(song.Tracks.Select(model => new TrackViewModel(model)));
 
+            string kick = null; //Path.Combine(Package.Current.InstalledLocation.Path, "Assets\\Kick.wav")
+
             if (song.Tracks.Count == 0)
             {
-                song.Tracks.Add(new Track(null, Length, TimeSpan.Zero, BPM));
+                song.Tracks.Add(new Track(kick, Length, TimeSpan.Zero, BPM));
                 Tracks.Add(new TrackViewModel(song.Tracks[0]));
             }
         }

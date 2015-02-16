@@ -8,11 +8,18 @@ namespace Beater.Models
 {
     class PatternTemplate : INotifyPropertyChanged
     {
-        public PatternTemplate(int BPM)
+        public PatternTemplate(int BPM, bool beatsActive = false)
         {
             BeatLength = TimeSpan.FromMinutes(1).Samples() / BPM;
             Measure = 4 * BeatLength;
             Beats = new bool[4];
+            if (beatsActive)
+            {
+                for (int i = 0; i < Beats.Length; i++)
+                {
+                    Beats[i] = beatsActive;
+                }
+            }
             Id = "#FFFFFF";
             bpm = BPM;
         }

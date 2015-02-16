@@ -31,5 +31,13 @@ namespace Beater.ViewModels
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
             }
         }
+
+        internal void PropagatePropertyChanged(object sender, PropertyChangedEventArgs args)
+        {
+            if (PropertyChanged != null && args != null)
+            {
+                PropertyChanged(this, args);
+            }
+        }
     }
 }

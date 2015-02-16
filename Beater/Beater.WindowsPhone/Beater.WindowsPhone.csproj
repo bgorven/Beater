@@ -98,7 +98,18 @@
     </AppxManifest>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\Closed Hat.wav" />
+    <Content Include="Assets\Crash Cymbal.wav" />
+    <Content Include="Assets\Floor Tom.wav" />
+    <Content Include="Assets\Kick.wav" />
     <Content Include="Assets\Logo.scale-240.png" />
+    <Content Include="Assets\Mid Hat.wav" />
+    <Content Include="Assets\Mid Tom.wav" />
+    <Content Include="Assets\Open Hat 1.wav" />
+    <Content Include="Assets\Open Hat 2.wav" />
+    <Content Include="Assets\Ride Cymbal.wav" />
+    <Content Include="Assets\Sample 1.wav" />
+    <Content Include="Assets\Sample 2.wav" />
     <Content Include="Assets\SmallLogo.scale-240.png" />
     <Content Include="Assets\SplashScreen.scale-240.png" />
     <Content Include="Assets\Square71x71Logo.scale-240.png" />
@@ -115,27 +126,6 @@
     <SDKReference Include="BehaviorsXamlSDKManaged, Version=12.0">
       <Name>Behaviors SDK %28XAML%29</Name>
     </SDKReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Assets\Classic-808_Clap.flac" />
-    <Content Include="Assets\Classic-808_Clave.flac" />
-    <Content Include="Assets\Classic-808_Cowbell.flac" />
-    <Content Include="Assets\Classic-808_Cymbal-high.flac" />
-    <Content Include="Assets\Classic-808_Hat_closed.flac" />
-    <Content Include="Assets\Classic-808_Hat_long.flac" />
-    <Content Include="Assets\Classic-808_Hi_Conga.flac" />
-    <Content Include="Assets\Classic-808_Hi_Tom.flac" />
-    <Content Include="Assets\Classic-808_Kick_long.flac" />
-    <Content Include="Assets\Classic-808_Kick_short.flac" />
-    <Content Include="Assets\Classic-808_Lo_Conga.flac" />
-    <Content Include="Assets\Classic-808_Lo_Tom.flac" />
-    <Content Include="Assets\Classic-808_Maracas.flac" />
-    <Content Include="Assets\Classic-808_Md_Conga.flac" />
-    <Content Include="Assets\Classic-808_Md_Tom.flac" />
-    <Content Include="Assets\Classic-808_Rim_Shot.flac" />
-    <Content Include="Assets\Classic-808_Snare_lo1.flac" />
-    <Content Include="Assets\Classic-808_Snare_lo2.flac" />
-    <Content Include="Assets\Classic-808_Snare_lo3.flac" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
     <VisualStudioVersion>12.0</VisualStudioVersion>

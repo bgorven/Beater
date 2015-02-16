@@ -23,8 +23,9 @@
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid.RowDefinitions>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
         
         <StackPanel Orientation="Horizontal">
@@ -71,6 +72,8 @@
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
                         
+                        
+                        
                         <TextBlock Text="{Binding Name}" Width="100" Grid.Column="0"/>
                         <ListView ItemsSource="{Binding Pattern}" Grid.Column="1" ScrollViewer.HorizontalScrollMode="Auto" ScrollViewer.VerticalScrollMode="Disabled">
                             <ListView.ItemsPanel>
@@ -96,7 +99,14 @@
 
                             <ListView.ItemTemplate>
                                 <DataTemplate>
-                                    <ListView BorderBrush="Aqua" ItemsSource="{Binding Beats}" ScrollViewer.HorizontalScrollMode="Disabled" ScrollViewer.VerticalScrollMode="Disabled">
+                                    <ListView ItemsSource="{Binding Beats}" 
+                                              ScrollViewer.HorizontalScrollMode="Disabled" ScrollViewer.VerticalScrollMode="Disabled">
+                                        <ListView.Background>
+                                            <LinearGradientBrush EndPoint="0,0.5" StartPoint="1,0.5">
+                                                <GradientStop Color="DarkMagenta"  Offset="0"/>
+                                                <GradientStop Color="Black" Offset="1"/>
+                                            </LinearGradientBrush>
+                                        </ListView.Background>
                                         <ListView.ItemsPanel>
                                             <ItemsPanelTemplate>
                                                 <StackPanel Orientation="Horizontal" />
@@ -119,7 +129,7 @@
                                         </ListView.ItemContainerStyle>
                                         <ListView.ItemTemplate>
                                             <DataTemplate>
-                                                <ToggleButton IsChecked="{Binding Active}"
+                                                <ToggleButton IsChecked="{Binding Beats, Mode=TwoWay}"
                                                     Width="{Binding BeatLength, Converter={StaticResource SamplesToPixelsConverter}}">
                                                     <Image />
                                                 </ToggleButton>
@@ -134,5 +144,8 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
+        <StackPanel Orientation="Horizontal" Grid.Row="2">
+            <Button>+</Button>
+        </StackPanel>
     </Grid>
 </Page>
