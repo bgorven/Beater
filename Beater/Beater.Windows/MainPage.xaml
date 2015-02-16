@@ -145,7 +145,20 @@
             </ListView.ItemTemplate>
         </ListView>
         <StackPanel Orientation="Horizontal" Grid.Row="2">
-            <Button>+</Button>
+            <ComboBox SelectedValue="{Binding AssetFile, Mode=TwoWay}">
+                <x:String>Closed Hat</x:String>
+                <x:String>Crash Cymbal</x:String>
+                <x:String>Floor Tom</x:String>
+                <x:String>Kick</x:String>
+                <x:String>Mid Hat</x:String>
+                <x:String>Mid Tom</x:String>
+                <x:String>Open Hat 1</x:String>
+                <x:String>Open Hat 2</x:String>
+                <x:String>Ride Cymbal</x:String>
+                <x:String>Sample 1</x:String>
+                <x:String>Sample 2</x:String>
+            </ComboBox>
+            <Button Command="{Binding AddTrackCommand}">+</Button>
         </StackPanel>
     </Grid>
 </Page>

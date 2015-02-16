@@ -59,6 +59,7 @@ namespace Beater.ViewModels
             StopCommand = new Command(CanStop, Stop);
             SaveCommand = new Command(Save);
             TrashCommand = new Command(Trash);
+            AddTrackCommand = new Command(CanAddTrack, AddTrack);
 
             Tracks = new ObservableCollection<TrackViewModel>(song.Tracks.Select(model => new TrackViewModel(model)));
 
@@ -136,9 +137,26 @@ namespace Beater.ViewModels
             return nullTask;
         }
 
-        private async Task AddTrack(StorageFile file)
+        private string assetFile;
+        public string AssetFile
         {
-            var model = await Task.Run(() => new Track(file.Path, Length, TimeSpan.Zero, BPM));
+            get { return assetFile; }
+            set
+            {
+                assetFile = value;
+                AddTrackCommand.Notify();
+            }
+        }
+        public Command AddTrackCommand { get; private set; }
+        private bool CanAddTrack()
+        {
+            return AssetFile != null;
+        }
+        private async Task AddTrack()
+        {
+            var path = Path.Combine(Package.Current.InstalledLocation.Path, "Assets");
+            path = Path.Combine(path, AssetFile + ".wav");
+            var model = await Task.Run(() => new Track(path, Length, TimeSpan.Zero, BPM));
             Tracks.Add(new TrackViewModel(model));
         }
         #endregion
