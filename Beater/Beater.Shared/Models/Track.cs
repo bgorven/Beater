@@ -10,19 +10,30 @@ namespace Beater.Models
     {
         public Track(string filename, TimeSpan length, TimeSpan offset, int BPM)
         {
-            Wave = new Sample.Provider(filename);
+            if (!string.IsNullOrEmpty(filename))
+            {
+                Wave = new Sample.Provider(filename);
+                Name = Path.GetFileNameWithoutExtension(filename);
+                Filename = filename;
+            }
+            else
+            {
+                Name = "Untitled";
+            }
+
             this.BPM = BPM;
-            Filename = filename;
-            Name = Path.GetFileNameWithoutExtension(filename);
             Length = length.Samples();
             Offset = offset.Samples();
 
-            var template = new BeatTemplate(BPM);
+            Pattern = new List<Pattern>();
+            Templates = new List<PatternTemplate>();
+
+            var template = new PatternTemplate(BPM);
             Templates.Add(template);
             var l = Offset + template.Measure;
             while (l < Length)
             {
-                Pattern.Add(new Beat(template));
+                Pattern.Add(new Pattern(template));
                 l += template.Measure;
             }
         }
@@ -33,7 +44,7 @@ namespace Beater.Models
         public int BPM { get; set; }
         public Sample.Provider Wave { get; set; }
 
-        public readonly List<Beat> Pattern = new List<Beat>();
-        public readonly List<BeatTemplate> Templates = new List<BeatTemplate>();
+        public List<Pattern> Pattern { get; private set; }
+        public List<PatternTemplate> Templates { get; private set; }
     }
 }

@@ -6,9 +6,9 @@ using System.Text;
 
 namespace Beater.Models
 {
-    class BeatTemplate : INotifyPropertyChanged
+    class PatternTemplate : INotifyPropertyChanged
     {
-        public BeatTemplate(int BPM)
+        public PatternTemplate(int BPM)
         {
             BeatLength = TimeSpan.FromMinutes(1).Samples() / BPM;
             Measure = 4 * BeatLength;

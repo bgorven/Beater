@@ -23,7 +23,7 @@ namespace Beater.Models
 
         public int BPM { get; set; }
 
-        public string Name { get; set; }
+        public string Title { get; set; }
 
         public List<Track> Tracks = new List<Track>();
     }

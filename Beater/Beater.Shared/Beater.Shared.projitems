@@ -16,12 +16,14 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Command.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\Beat.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\BeatTemplate.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converters.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Pattern.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\PatternTemplate.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Song.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Track.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Sample.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\BeatViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\PatternViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\SongViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\TrackViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\ViewModelBase.cs" />

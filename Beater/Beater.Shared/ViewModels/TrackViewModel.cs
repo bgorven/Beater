@@ -14,10 +14,11 @@ namespace Beater.ViewModels
         public TrackViewModel(Track model)
         {
             track = model;
+            Pattern = new ObservableCollection<PatternViewModel>(model.Pattern.Select(beat => new PatternViewModel(beat)));
         }
 
         #region Model Properties
-        string Name
+        public string Name
         {
             get { return track.Name; }
             set
@@ -27,7 +28,7 @@ namespace Beater.ViewModels
             }
         }
 
-        string Filename
+        public string Filename
         {
             get { return track.Filename; }
             set
@@ -37,7 +38,7 @@ namespace Beater.ViewModels
             }
         }
 
-        long Offset
+        public long Offset
         {
             get { return track.Offset; }
             set
@@ -47,7 +48,7 @@ namespace Beater.ViewModels
             }
         }
 
-        int BPM
+        public int BPM
         {
             get { return track.BPM; }
             set
@@ -57,24 +58,24 @@ namespace Beater.ViewModels
             }
         }
 
-        long Length
+        public long Length
         {
             get { return track.Length; }
             set
             {
                 track.Length = value;
                 RaisePropertyChanged("Length");
-                for (long t = Offset, i = 0; t < Length ; t += pattern[(int)i].Measure, i++ )
+                for (long t = Offset, i = 0; t < Length ; t += Pattern[(int)i].Measure, i++ )
                 {
-                    if (pattern.Count <= i)
+                    if (Pattern.Count <= i)
                     {
-                        if (track.Templates.Count == 0) track.Templates.Add(new BeatTemplate(BPM));
+                        if (track.Templates.Count == 0) track.Templates.Add(new PatternTemplate(BPM));
                     }
                 }
             }
         }
 
-        Sample.Provider Wave
+        public Sample.Provider Wave
         {
             get { return track.Wave; }
             set
@@ -85,6 +86,6 @@ namespace Beater.ViewModels
         }
         #endregion
 
-        ObservableCollection<BeatViewModel> pattern = new ObservableCollection<BeatViewModel>();
+        public ObservableCollection<PatternViewModel> Pattern { get; private set; }
     }
 }

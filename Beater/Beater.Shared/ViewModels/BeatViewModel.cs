@@ -1,29 +1,39 @@
 ﻿using Beater.Models;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
 using System.Text;
+using System.Linq;
+using System.ComponentModel;
 
 namespace Beater.ViewModels
 {
     class BeatViewModel : ViewModelBase
     {
-        private Beat beat;
-        private float lengthScale;
-
-        public override event PropertyChangedEventHandler PropertyChanged;
-
-        BeatViewModel(BeatTemplate template, float lengthScale)
+        public static IEnumerable<BeatViewModel> BeatPattern(Pattern beat)
         {
-            beat = new Beat(template);
-            beat.PropertyChanged += this.PropertyChanged;
-            this.lengthScale = lengthScale;
+            return beat.Beats.Select((b, i) => new BeatViewModel(beat, i));
         }
 
-        public Sample.Count BeatLength { get { return beat.BeatLength; } set { beat.BeatLength = value; } }
-        public Sample.Count Measure { get { return beat.Measure; } set { beat.Measure = value; } }
-        public bool[] Beats { get { return beat.Beats; } set { beat.Beats = value; } }
-        public string Id { get { return beat.Id; } set { beat.Id = value; } }
+        private BeatViewModel(Pattern beat, int number)
+        {
+            model = beat;
+            index = number;
+            beat.PropertyChanged += this.PropertyChanged;
+        }
+
+        private Pattern model;
+        private int index;
+        public long BeatLength { get { return model.BeatLength; } }
+        public bool Active
+        {
+            get { return model.Beats[index]; }
+            set
+            {
+                model.Beats[index] = value;
+                model.RaiseBeatsChanged();
+            }
+        }
+
+        public override event PropertyChangedEventHandler PropertyChanged;
     }
 }

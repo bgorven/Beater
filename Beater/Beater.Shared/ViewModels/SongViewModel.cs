@@ -7,12 +7,14 @@ using System.Collections.ObjectModel;
 using Windows.Storage.Pickers;
 using Windows.Storage;
 using System.IO;
+using System.Windows.Input;
+using System.Linq;
 
 namespace Beater.ViewModels
 {
     class SongViewModel : ViewModelBase
     {
-        private Song song = new Song { BPM = 60, Length = TimeSpan.FromMinutes(3), Name = "Untitled" };
+        private Song song = new Song { BPM = 60, Length = TimeSpan.FromMinutes(3), Title = "Untitled", Tracks = new List<Track>() };
 
         #region Model Properties
         public int BPM
@@ -35,13 +37,13 @@ namespace Beater.ViewModels
             }
         }
 
-        public string Name
+        public string Title
         {
-            get { return song.Name; }
+            get { return song.Title; }
             set
             {
-                song.Name = value;
-                RaisePropertyChanged("Name");
+                song.Title = value;
+                RaisePropertyChanged("Title");
             }
         }
         #endregion
@@ -53,27 +55,38 @@ namespace Beater.ViewModels
             StopCommand = new Command(CanStop, Stop);
             SaveCommand = new Command(Save);
             TrashCommand = new Command(Trash);
+
+            Tracks = new ObservableCollection<TrackViewModel>(song.Tracks.Select(model => new TrackViewModel(model)));
+
+            if (song.Tracks.Count == 0)
+            {
+                song.Tracks.Add(new Track(null, Length, TimeSpan.Zero, BPM));
+                Tracks.Add(new TrackViewModel(song.Tracks[0]));
+            }
         }
 
         private bool playing;
 
-        public ObservableCollection<TrackViewModel> tracks = new ObservableCollection<TrackViewModel>(); 
+        public ObservableCollection<TrackViewModel> Tracks { get; private set; } 
 
         #region Commands
-        public Command PlayCommand;
+        public Command PlayCommand { get; private set; }
 
         private bool CanPlay()
         {
             return !playing;
         }
 
-        private Task Play()
+        private async Task Play()
         {
             playing = true;
-            return nullTask;
+
+            await nullTask;
+            PauseCommand.Notify();
+            StopCommand.Notify();
         }
 
-        public Command PauseCommand;
+        public Command PauseCommand { get; private set; }
 
         private bool CanPause()
         {
@@ -83,10 +96,12 @@ namespace Beater.ViewModels
         private Task Pause()
         {
             playing = false;
+            PlayCommand.Notify();
+            StopCommand.Notify();
             return nullTask;
         }
 
-        public Command StopCommand;
+        public Command StopCommand { get; private set; }
 
         private bool CanStop()
         {
@@ -95,18 +110,20 @@ namespace Beater.ViewModels
 
         private Task Stop()
         {
-            playing = true;
+            playing = false;
+            PlayCommand.Notify();
+            PauseCommand.Notify();
             return nullTask;
         }
 
-        public Command SaveCommand;
+        public Command SaveCommand { get; private set; }
 
         private Task Save()
         {
             return nullTask;
         }
 
-        public Command TrashCommand;
+        public Command TrashCommand { get; private set; }
 
         private Task Trash()
         {
@@ -116,7 +133,7 @@ namespace Beater.ViewModels
         private async Task AddTrack(StorageFile file)
         {
             var model = await Task.Run(() => new Track(file.Path, Length, TimeSpan.Zero, BPM));
-            tracks.Add(new TrackViewModel(model));
+            Tracks.Add(new TrackViewModel(model));
         }
         #endregion
     }

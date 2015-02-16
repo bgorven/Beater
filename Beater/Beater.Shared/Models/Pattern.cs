@@ -5,11 +5,11 @@ using System.Text;
 
 namespace Beater.Models
 {
-    class Beat : INotifyPropertyChanged, IDisposable
+    class Pattern : INotifyPropertyChanged, IDisposable
     {
-        public BeatTemplate Template;
+        public PatternTemplate Template;
 
-        public Beat(BeatTemplate template)
+        public Pattern(PatternTemplate template)
         {
             Template = template;
             Template.PropertyChanged += PropertyChanged;
@@ -42,6 +42,9 @@ namespace Beater.Models
             }
         }
 
+        /// <summary>
+        /// Note: you need to call <code>RaiseBeatChanged()</code> if you set an array member; we've got some refactoring to do here.
+        /// </summary>
         public bool[] Beats
         {
             get { return Template.Beats; }
@@ -70,6 +73,11 @@ namespace Beater.Models
                 Template.BPM = value;
                 Template.RaisePropertyChanged("BPM");
             }
+        }
+
+        internal void RaiseBeatsChanged()
+        {
+            Template.RaisePropertyChanged("Beats");
         }
     }
 }
