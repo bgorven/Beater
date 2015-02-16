@@ -112,6 +112,25 @@
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
+    <Content Include="Assets\Classic-808_Clap.flac" />
+    <Content Include="Assets\Classic-808_Clave.flac" />
+    <Content Include="Assets\Classic-808_Cowbell.flac" />
+    <Content Include="Assets\Classic-808_Cymbal-high.flac" />
+    <Content Include="Assets\Classic-808_Hat_closed.flac" />
+    <Content Include="Assets\Classic-808_Hat_long.flac" />
+    <Content Include="Assets\Classic-808_Hi_Conga.flac" />
+    <Content Include="Assets\Classic-808_Hi_Tom.flac" />
+    <Content Include="Assets\Classic-808_Kick_long.flac" />
+    <Content Include="Assets\Classic-808_Kick_short.flac" />
+    <Content Include="Assets\Classic-808_Lo_Conga.flac" />
+    <Content Include="Assets\Classic-808_Lo_Tom.flac" />
+    <Content Include="Assets\Classic-808_Maracas.flac" />
+    <Content Include="Assets\Classic-808_Md_Conga.flac" />
+    <Content Include="Assets\Classic-808_Md_Tom.flac" />
+    <Content Include="Assets\Classic-808_Rim_Shot.flac" />
+    <Content Include="Assets\Classic-808_Snare_lo1.flac" />
+    <Content Include="Assets\Classic-808_Snare_lo2.flac" />
+    <Content Include="Assets\Classic-808_Snare_lo3.flac" />
     <None Include="Beater.Windows_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
