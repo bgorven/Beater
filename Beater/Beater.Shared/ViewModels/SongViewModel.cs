@@ -15,7 +15,7 @@ namespace Beater.ViewModels
 {
     class SongViewModel : ViewModelBase
     {
-        private Song song = new Song { BPM = 60, Length = TimeSpan.FromMinutes(3), Title = "Untitled", Tracks = new List<Track>() };
+        private Song song = new Song { BPM = 60, Length = TimeSpan.FromSeconds(30), Title = "Untitled", Tracks = new List<Track>() };
 
         #region Model Properties
         public int BPM
