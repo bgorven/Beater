@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Beater.Audio;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -12,7 +13,7 @@ namespace Beater.Models
         {
             if (!string.IsNullOrEmpty(filename))
             {
-                Wave = new Sample.Provider(filename);
+                OriginalWave = new Sample.Provider(filename);
                 Name = Path.GetFileNameWithoutExtension(filename);
                 Filename = filename;
             }
@@ -43,7 +44,7 @@ namespace Beater.Models
         public Sample.Count Offset { get; set; }
         public int BPM { get; set; }
         public Sample.Provider Wave { get; set; }
-
+        public Sample.Provider OriginalWave { get; set; }
         public List<Pattern> Pattern { get; private set; }
         public List<PatternTemplate> Templates { get; private set; }
     }

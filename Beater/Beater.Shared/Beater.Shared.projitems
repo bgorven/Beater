@@ -15,13 +15,15 @@
     <Compile Include="$(MSBuildThisFileDirectory)App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Audio\Sample.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Audio\SongSampleProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Audio\TrackSampleProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Command.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Pattern.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\PatternTemplate.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Song.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Track.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Sample.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\BeatViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\PatternViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\SongViewModel.cs" />

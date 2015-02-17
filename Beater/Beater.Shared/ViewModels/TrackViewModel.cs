@@ -1,9 +1,13 @@
-﻿using Beater.Models;
+﻿using Beater.Audio;
+using Beater.Models;
+using NAudio.Wave;
+using NAudio.Wave.SampleProviders;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Beater.ViewModels
 {
@@ -15,6 +19,7 @@ namespace Beater.ViewModels
         {
             track = model;
             Pattern = new ObservableCollection<PatternViewModel>(model.Pattern.Select(beat => new PatternViewModel(beat)));
+            Provider = new TrackSampleProvider(this);
         }
 
         #region Model Properties
@@ -38,7 +43,7 @@ namespace Beater.ViewModels
             }
         }
 
-        public long Offset
+        public int Offset
         {
             get { return track.Offset; }
             set
@@ -58,7 +63,7 @@ namespace Beater.ViewModels
             }
         }
 
-        public long Length
+        public int Length
         {
             get { return track.Length; }
             set
@@ -75,6 +80,8 @@ namespace Beater.ViewModels
             }
         }
 
+        public TrackSampleProvider Provider;
+
         public Sample.Provider Wave
         {
             get { return track.Wave; }
@@ -84,7 +91,51 @@ namespace Beater.ViewModels
                 RaisePropertyChanged("Wave");
             }
         }
+
+        public Sample.Provider OriginalWave
+        {
+            get { return track.OriginalWave; }
+            set
+            {
+                track.OriginalWave = value;
+                RaisePropertyChanged("OriginalWave");
+            }
+        }
         #endregion
+
+        public async Task UpdateWave()
+        {
+            var original = OriginalWave;
+
+            Wave = await Task.Run(() =>
+            {
+                ISampleProvider processed = new Sample.Provider(original.Samples, original.WaveFormat);
+
+                if (original.WaveFormat.SampleRate != Sample.SampleRateHz)
+                {
+                    processed = new WdlResamplingSampleProvider(processed, Sample.SampleRateHz);
+                }
+
+                if (processed.WaveFormat.Channels == 1)
+                {
+                    processed = new MonoToStereoSampleProvider(processed);
+                }
+                else if (processed.WaveFormat.Channels > 2)
+                {
+                    throw new FormatException(processed.WaveFormat.Channels + " channel audio? What am I supposed to do with that?");
+                }
+
+                var newBufSize = (int)(original.Samples.Length
+                    * ((float)Sample.SampleRateHz / original.WaveFormat.SampleRate)
+                    * (2 / original.WaveFormat.Channels)
+                    * 2);
+
+                var newBuf = new float[newBufSize];
+                newBufSize = processed.Read(newBuf, 0, newBufSize);
+                Array.Resize(ref newBuf, newBufSize);
+                return new Sample.Provider(newBuf, Sample.WaveFormat);
+            });
+        }
 
         public ObservableCollection<PatternViewModel> Pattern { get; private set; }
     }

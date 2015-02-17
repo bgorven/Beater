@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Beater.Audio;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;

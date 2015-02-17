@@ -3,27 +3,27 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Beater
+namespace Beater.Audio
 {
     static class Sample
     {
-        public const long SampleRateHz = 44100;
+        public const int SampleRateHz = 44100;
 
         public struct Count
         {
-            public readonly long Value;
+            public readonly int Value;
 
-            public Count(long val)
+            public Count(int val)
             {
                 this.Value = val;
             }
 
-            public static implicit operator long(Count val)
+            public static implicit operator int(Count val)
             {
                 return val.Value;
             }
 
-            public static implicit operator Count(long val)
+            public static implicit operator Count(int val)
             {
                 return new Count(val);
             }
@@ -34,7 +34,7 @@ namespace Beater
         }
 
         public static Count Samples(this TimeSpan val){
-            return checked(val.Ticks * SampleRateHz / TimeSpan.TicksPerSecond);
+            return checked((int)(val.Ticks * SampleRateHz / TimeSpan.TicksPerSecond));
         }
 
         public class Provider : ISampleProvider
@@ -55,10 +55,10 @@ namespace Beater
                 }
             }
 
-            public Provider(Provider copy)
+            public Provider(float[] samples, WaveFormat format)
             {
-                Samples = copy.Samples;
-                WaveFormat = copy.WaveFormat;
+                Samples = samples;
+                WaveFormat = format;
             }
 
             public WaveFormat WaveFormat { get; private set; }
@@ -71,6 +71,23 @@ namespace Beater
                 position += count;
                 return count;
             }
+
+            public void Reset()
+            {
+                position = 0;
+            }
+
+            internal void MixTo(int start, float[] buffer, int offset, int count)
+            {
+                for (int i = start;
+                    i < start + count && i < Samples.Length && offset < buffer.Length;
+                    i++, offset++)
+                {
+                    buffer[offset] += Samples[i];
+                }
+            }
         }
+
+        public static readonly WaveFormat WaveFormat = WaveFormat.CreateIeeeFloatWaveFormat(SampleRateHz, 2);
     }
 }

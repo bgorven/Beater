@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Beater.Audio;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -39,8 +40,8 @@ namespace Beater.Models
             {
                 var ratio = ((double)value) / bpm;
                 bpm = value;
-                BeatLength = (long)(BeatLength * ratio);
-                Measure = (long)(Measure * ratio);
+                BeatLength = (int)(BeatLength * ratio);
+                Measure = (int)(Measure * ratio);
                 props = props ?? new string[] { "BPM", "BeatLength", "Measure" };
                 RaisePropertyChanged(props);
             }

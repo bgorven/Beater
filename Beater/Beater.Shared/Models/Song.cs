@@ -2,24 +2,13 @@
 using System.Collections.Generic;
 using System.Text;
 using Beater;
+using Beater.Audio;
 
 namespace Beater.Models
 {
     class Song
     {
-        private Sample.Count _length;
-
-        public TimeSpan Length
-        {
-            get
-            {
-                return _length.Time();
-            }
-            set
-            {
-                _length = value.Samples();
-            }
-        }
+        public Sample.Count Length { get; set; }
 
         public int BPM { get; set; }
 

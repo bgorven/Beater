@@ -10,12 +10,16 @@ using System.IO;
 using System.Windows.Input;
 using System.Linq;
 using Windows.ApplicationModel;
+using NAudio.Wave;
+using NAudio.Win8.Wave.WaveOutputs;
+using Beater.Audio;
+using Windows.UI.Core;
 
 namespace Beater.ViewModels
 {
     class SongViewModel : ViewModelBase
     {
-        private Song song = new Song { BPM = 60, Length = TimeSpan.FromSeconds(30), Title = "Untitled", Tracks = new List<Track>() };
+        private Song song = new Song { BPM = 60, Length = TimeSpan.FromSeconds(36).Samples(), Title = "Untitled", Tracks = new List<Track>() };
 
         #region Model Properties
         public int BPM
@@ -30,12 +34,17 @@ namespace Beater.ViewModels
 
         public TimeSpan Length
         {
-            get { return song.Length; }
+            get { return song.Length.Time(); }
             set
             {
-                song.Length = value;
+                song.Length = value.Samples();
                 RaisePropertyChanged("Length");
             }
+        }
+
+        public int SampleCount
+        {
+            get { return song.Length; }
         }
 
         public string Title
@@ -62,33 +71,78 @@ namespace Beater.ViewModels
             AddTrackCommand = new Command(CanAddTrack, AddTrack);
 
             Tracks = new ObservableCollection<TrackViewModel>(song.Tracks.Select(model => new TrackViewModel(model)));
+            provider = new SongSampleProvider(this);
 
-            string kick = null; //Path.Combine(Package.Current.InstalledLocation.Path, "Assets\\Kick.wav")
+            string kick = Path.Combine(Package.Current.InstalledLocation.Path, "Assets\\Kick.wav");
 
             if (song.Tracks.Count == 0)
             {
                 song.Tracks.Add(new Track(kick, Length, TimeSpan.Zero, BPM));
                 Tracks.Add(new TrackViewModel(song.Tracks[0]));
+                Tracks[0].Wave = Tracks[0].OriginalWave;
+            }
+
+            try
+            {
+                var window = CoreWindow.GetForCurrentThread();
+                if (window != null) UIThread = window.Dispatcher;
+            }
+            catch (Exception) { }
+        }
+
+        private CoreDispatcher UIThread;
+
+        public ObservableCollection<TrackViewModel> Tracks { get; private set; }
+
+        #region Audio
+        public Sample.Count Progress { get; private set; }
+        public TimeSpan PlayProgress
+        {
+            get { return Progress.Time(); }
+            set
+            {
+                Progress = value.Samples();
+                RaisePropertyChanged("PlayProgress");
             }
         }
 
-        private bool playing;
+        private IWavePlayer player;
+        private SongSampleProvider provider;
 
-        public ObservableCollection<TrackViewModel> Tracks { get; private set; } 
+        internal void SetProgress(int p)
+        {
+            Progress = p % SampleCount;
+            if (UIThread != null)
+            {
+                var ignore = UIThread.RunAsync(CoreDispatcherPriority.Normal, () => RaisePropertyChanged("PlayProgress"));
+            }
+        }
+
+        #endregion
 
         #region Commands
         public Command PlayCommand { get; private set; }
 
         private bool CanPlay()
         {
-            return !playing;
+            return player == null || player.PlaybackState != PlaybackState.Playing;
         }
 
         private async Task Play()
         {
-            playing = true;
+            if (player == null)
+            {
+                player = await Task.Run(() =>
+                {
+                    var p = new WasapiOutRT(NAudio.CoreAudioApi.AudioClientShareMode.Shared, 500);
+                    p.Init(provider);
+                    return p;
+                });
+            }
 
-            await nullTask;
+            player.Play();
+
+            PlayCommand.Notify();
             PauseCommand.Notify();
             StopCommand.Notify();
         }
@@ -97,13 +151,18 @@ namespace Beater.ViewModels
 
         private bool CanPause()
         {
-            return playing;
+            return player != null && player.PlaybackState == PlaybackState.Playing;
         }
 
         private Task Pause()
         {
-            playing = false;
+            if (player != null)
+            {
+                player.Pause();
+            }
+
             PlayCommand.Notify();
+            PauseCommand.Notify();
             StopCommand.Notify();
             return nullTask;
         }
@@ -112,14 +171,20 @@ namespace Beater.ViewModels
 
         private bool CanStop()
         {
-            return !playing;
+            return player != null && player.PlaybackState != PlaybackState.Stopped;
         }
 
         private Task Stop()
         {
-            playing = false;
+            if (player != null)
+            {
+                player.Stop();
+            }
+            PlayProgress = TimeSpan.Zero;
+
             PlayCommand.Notify();
             PauseCommand.Notify();
+            StopCommand.Notify();
             return nullTask;
         }
 
@@ -157,7 +222,9 @@ namespace Beater.ViewModels
             var path = Path.Combine(Package.Current.InstalledLocation.Path, "Assets");
             path = Path.Combine(path, AssetFile + ".wav");
             var model = await Task.Run(() => new Track(path, Length, TimeSpan.Zero, BPM));
-            Tracks.Add(new TrackViewModel(model));
+            var viewmodel = new TrackViewModel(model);
+            await viewmodel.UpdateWave();
+            Tracks.Add(viewmodel);
         }
         #endregion
     }
