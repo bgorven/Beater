@@ -7,7 +7,12 @@ namespace Beater.Audio
 {
     static class Sample
     {
-        public const int SampleRateHz = 44100;
+        /// <summary>
+        /// Raw number of samples per second (base sample rate * number of channels)
+        /// </summary>
+        public const int SamplesPerSecond = 88200;
+
+        public static readonly WaveFormat WaveFormat = WaveFormat.CreateIeeeFloatWaveFormat(44100, 2);
 
         public struct Count
         {
@@ -29,12 +34,12 @@ namespace Beater.Audio
             }
 
             public TimeSpan Time(){
-                return checked(TimeSpan.FromTicks(Value * TimeSpan.TicksPerSecond / Sample.SampleRateHz));
+                return checked(TimeSpan.FromTicks(Value * TimeSpan.TicksPerSecond / Sample.SamplesPerSecond));
             }
         }
 
         public static Count Samples(this TimeSpan val){
-            return checked((int)(val.Ticks * SampleRateHz / TimeSpan.TicksPerSecond));
+            return checked((int)(val.Ticks * SamplesPerSecond / TimeSpan.TicksPerSecond));
         }
 
         public class Provider : ISampleProvider
@@ -87,7 +92,5 @@ namespace Beater.Audio
                 }
             }
         }
-
-        public static readonly WaveFormat WaveFormat = WaveFormat.CreateIeeeFloatWaveFormat(SampleRateHz, 2);
     }
 }

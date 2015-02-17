@@ -23,19 +23,30 @@ namespace Beater.Audio
 
         public int Read(float[] buffer, int offset, int count)
         {
-            count = Math.Min(count, _song.SampleCount - _song.Progress * 2);
-            if (count <= 0) return 0;
-
             for (var i = offset; i < offset + count && i < buffer.Length; i++) buffer[i] = 0;
 
+            var countToEnd = Math.Min(count, _song.SampleCount - _song.Progress);
+            var countFromStart = count - countToEnd;
+
+            MixTo(_song.Progress, buffer, offset, countToEnd);
+            if (countFromStart > 0)
+            {
+                MixTo(0, buffer, offset + countToEnd, countFromStart);
+                _song.SetProgress(countFromStart);
+            }
+            else
+            {
+                _song.SetProgress(_song.Progress + count);
+            }
+            return count;
+        }
+
+        private void MixTo(int bufStart, float[] buffer, int offset, int count)
+        {
             foreach (var track in _song.Tracks)
             {
-                track.Provider.MixTo(_song.Progress * 2, buffer, offset, count);
+                track.Provider.MixTo(bufStart, buffer, offset, count);
             }
-
-            _song.SetProgress(_song.Progress + count / 2);
-
-            return count;
         }
     }
 }

@@ -111,9 +111,9 @@ namespace Beater.ViewModels
             {
                 ISampleProvider processed = new Sample.Provider(original.Samples, original.WaveFormat);
 
-                if (original.WaveFormat.SampleRate != Sample.SampleRateHz)
+                if (original.WaveFormat.SampleRate != Sample.SamplesPerSecond)
                 {
-                    processed = new WdlResamplingSampleProvider(processed, Sample.SampleRateHz);
+                    processed = new WdlResamplingSampleProvider(processed, Sample.SamplesPerSecond);
                 }
 
                 if (processed.WaveFormat.Channels == 1)
@@ -126,7 +126,7 @@ namespace Beater.ViewModels
                 }
 
                 var newBufSize = (int)(original.Samples.Length
-                    * ((float)Sample.SampleRateHz / original.WaveFormat.SampleRate)
+                    * ((float)Sample.SamplesPerSecond / original.WaveFormat.SampleRate)
                     * (2 / original.WaveFormat.Channels)
                     * 2);
 
