@@ -26,7 +26,11 @@ namespace Beater
         public MainPage()
         {
             this.InitializeComponent();
-            this.DataContext = new SongViewModel("kick");
+        }
+
+        private void ResizeProgressBar(object sender, SizeChangedEventArgs e)
+        {
+            ProgressLine.Y2 = e.NewSize.Height;
         }
     }
 }

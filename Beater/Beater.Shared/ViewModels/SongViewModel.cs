@@ -15,6 +15,7 @@ using NAudio.Win8.Wave.WaveOutputs;
 using Beater.Audio;
 using Windows.UI.Core;
 using Beater.Controls;
+using System.Threading;
 
 namespace Beater.ViewModels
 {
@@ -59,17 +60,9 @@ namespace Beater.ViewModels
         }
         #endregion
 
-        /// <summary>
-        /// Creates sample data for testing/editor
-        /// </summary>
-        public SongViewModel() : this(null) { }
-
-        public SongViewModel(string defaultWave)
+        public SongViewModel()
         {
-            if (defaultWave != null && !defaultWave.Contains("\\"))
-            {
-                defaultWave = Path.Combine(Package.Current.InstalledLocation.Path, "Assets\\" + defaultWave + ".wav");
-            }
+            var defaultWave = Path.Combine(Package.Current.InstalledLocation.Path, "Assets\\" + "Kick.wav");
 
             PlayCommand = new Command(CanPlay, Play);
             PauseCommand = new Command(CanPause, Pause);
@@ -85,22 +78,21 @@ namespace Beater.ViewModels
             {
                 song.Tracks.Add(new Track(defaultWave, Length, TimeSpan.Zero, BPM));
                 Tracks.Add(new TrackViewModel(song.Tracks[0]));
-                Tracks[0].Wave = Tracks[0].OriginalWave;
+                Tracks[0].UpdatePattern();
                 Tracks[0].Pattern[0].Beats[0].Beats = true;
-                Tracks[0].Pattern[0].Beats[2].Beats = true;
-
-                int location = 0;
-                foreach (var pattern in Tracks[0].Pattern)
-                {
-                    pattern.Location = location;
-                    location += pattern.Measure;
-                }
             }
 
             try
             {
                 var window = CoreWindow.GetForCurrentThread();
                 if (window != null) UIThread = window.Dispatcher;
+                var ignoreResult = UIThread.RunAsync(CoreDispatcherPriority.Normal, async () =>
+                {
+                    foreach (var track in Tracks)
+                    {
+                        await track.Update();
+                    }
+                });
             }
             catch (Exception) { }
         }
@@ -159,11 +151,23 @@ namespace Beater.ViewModels
                 });
             }
 
+            player.PlaybackStopped += player_PlaybackStopped;
+
             player.Play();
 
             PlayCommand.Notify();
             PauseCommand.Notify();
             StopCommand.Notify();
+        }
+
+        void player_PlaybackStopped(object sender, StoppedEventArgs e)
+        {
+            var ignore = UIThread.RunAsync(CoreDispatcherPriority.High, async () => await Stop());
+            if (e.Exception != null)
+            {
+                var temp = Interlocked.Exchange(ref player, null);
+                player.Dispose();
+            }
         }
 
         public Command PauseCommand { get; private set; }
@@ -238,10 +242,10 @@ namespace Beater.ViewModels
         }
         private async Task AddTrack()
         {
-            var path = Path.Combine(Package.Current.InstalledLocation.Path, "Assets");
-            path = Path.Combine(path, AssetFile + ".wav");
-            var model = await Task.Run(() => new Track(path, Length, TimeSpan.Zero, BPM));
-            var viewmodel = new TrackViewModel(model);
+            var filename = Path.Combine(Package.Current.InstalledLocation.Path, "Assets");
+            filename = Path.Combine(filename, AssetFile + ".wav");
+
+            var viewmodel = new TrackViewModel(new Track(filename, Length, TimeSpan.Zero, BPM));
             await viewmodel.Update();
             Tracks.Add(viewmodel);
         }

@@ -105,15 +105,37 @@ namespace Beater.ViewModels
 
         public async Task Update()
         {
-            Wave = await Task.Run(() => UpdateWave(OriginalWave));
+            if (Filename != null)
+            {
+                OriginalWave = await Task.Run(() => new Sample.Provider(Filename));
+                Wave = await Task.Run(() => UpdateWave(OriginalWave));
+            }
+
+            UpdatePattern();
+        }
+
+        public void UpdatePattern()
+        {
             foreach (var template in track.Templates)
             {
                 template.BPM = BPM;
+            }
+            if (track.Templates.Count == 0)
+            {
+                track.Templates.Add(new PatternTemplate(BPM));
             }
             int location = 0;
             foreach (var pattern in Pattern)
             {
                 pattern.Location = location;
+                location += pattern.Measure;
+            }
+
+            while (location < Length)
+            {
+                var pattern = new Pattern(track.Templates[0]);
+                track.Pattern.Add(pattern);
+                Pattern.Add(new PatternViewModel(pattern) { Location = location });
                 location += pattern.Measure;
             }
         }

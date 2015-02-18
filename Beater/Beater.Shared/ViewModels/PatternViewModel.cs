@@ -10,22 +10,29 @@ namespace Beater.ViewModels
 {
     class PatternViewModel : ViewModelBase
     {
-        private Pattern beat;
+        private Pattern pattern;
 
         public override event PropertyChangedEventHandler PropertyChanged;
 
         public PatternViewModel(Pattern model)
         {
-            beat = model;
-            beat.PropertyChanged += this.PropertyChanged;
-            Beats = new ObservableCollection<BeatViewModel>(BeatViewModel.BeatPattern(beat));
+            pattern = model;
+            pattern.PropertyChanged += this.PropertyChanged;
+            Beats = new ObservableCollection<BeatViewModel>(BeatViewModel.BeatPattern(pattern));
         }
 
-        public int BeatLength { get { return beat.BeatLength; } }
-        public int Measure { get { return beat.Measure; } }
+        public int BeatLength { get { return pattern.BeatLength; } }
+        public int Measure { get { return pattern.Measure; } }
         public ObservableCollection<BeatViewModel> Beats { get; private set; }
-        public string Id { get { return beat.Id; } set { beat.Id = value; } }
-
-        public int Location { get; set; }
+        public string Id { get { return pattern.Id; } set { pattern.Id = value; } }
+        public int Location
+        {
+            get { return pattern.Location; }
+            set
+            {
+                pattern.Location = value;
+                RaisePropertyChanged("Location");
+            }
+        }
     }
 }

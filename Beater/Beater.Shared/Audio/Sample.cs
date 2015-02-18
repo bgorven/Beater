@@ -55,7 +55,7 @@ namespace Beater.Audio
                 }
                 else
                 {
-                    return false;
+                    return Value.Equals(obj);
                 }
             }
 

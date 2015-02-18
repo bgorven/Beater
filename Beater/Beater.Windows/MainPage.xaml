@@ -6,9 +6,9 @@
     xmlns:viewmodel="using:Beater.ViewModels"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d">
-    <!--xmlns:Interactivity="using:Microsoft.Xaml.Interactivity"
-    xmlns:Core="using:Microsoft.Xaml.Interactions.Core"-->
+    mc:Ignorable="d"
+    xmlns:Interactivity="using:Microsoft.Xaml.Interactivity"
+    xmlns:Core="using:Microsoft.Xaml.Interactions.Core">
 
     <Page.Resources>
         <local:NumericScaleConverter Scale="0.00048828125"  x:Key="SamplesToPixelsConverter" />
@@ -21,7 +21,7 @@
             <Setter Property="Foreground" Value="{StaticResource ButtonForegroundThemeBrush}"></Setter>
         </Style>
     </Page.Resources>
-    
+
     <Page.DataContext>
         <viewmodel:SongViewModel />
     </Page.DataContext>
@@ -31,7 +31,7 @@
             <RowDefinition Height="auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        
+
         <StackPanel Orientation="Horizontal">
             <Button Command="{Binding PlayCommand}">Play</Button>
             <Button Command="{Binding PauseCommand}">Pause</Button>
@@ -56,63 +56,75 @@
                 <ItemsControl ItemsSource="{Binding Tracks}" Grid.Row="0" Grid.Column="0">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding Name}" Height="100" FontSize="16"/>
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="25" />
+                                    <RowDefinition Height="75" />
+                                </Grid.RowDefinitions>
+                                <TextBlock Text="{Binding Name}" VerticalAlignment="Center" FontSize="16" Grid.Row="0"/>
+                            </Grid>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
-                <ScrollViewer HorizontalScrollMode="Auto" VerticalScrollMode="Disabled" HorizontalScrollBarVisibility="Auto" 
+                <ScrollViewer HorizontalScrollMode="Auto" HorizontalScrollBarVisibility="Auto"
+                               VerticalScrollMode="Disabled" VerticalScrollBarVisibility="Disabled"
                               Grid.Row="0" Grid.Column="1">
-                    <Grid Width="{Binding Length, Converter={StaticResource SamplesToPixelsConverter}}" Name="TrackContainer">
-                        <Line Stroke="White" StrokeThickness="5" Canvas.ZIndex="1" 
-                              Y1="0" Y2="{Binding ActualHeight, ElementName=TrackContainer}"
+                    <Canvas SizeChanged="ResizeProgressBar" Name="TrackContainer" HorizontalAlignment="Left"
+                            Width="{Binding SampleCount, Converter={StaticResource SamplesToPixelsConverter}}">
+                        <Line Stroke="White" StrokeThickness="5" Canvas.ZIndex="1" Name="ProgressLine"
+                              Y1="0" Y2="{Binding ActualHeight, ElementName=TrackContainer, Mode=OneTime}"
                               X1="{Binding Progress, Converter={StaticResource SamplesToPixelsConverter}}" 
                               X2="{Binding Progress, Converter={StaticResource SamplesToPixelsConverter}}" />
                         <ItemsControl ItemsSource="{Binding Tracks}" Canvas.ZIndex="0">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
-                                    <local:CanvasItemsControl ItemsSource="{Binding Pattern}" Grid.Column="1" Height="100" 
-                                                              Width="{Binding Length, Converter={StaticResource SamplesToPixelsConverter}}"
-                                                              BindingPathLeft="Location" BindingConverterPosition="{StaticResource SamplesToPixelsConverter}">
-                                        <ItemsControl.ItemsPanel>
-                                            <ItemsPanelTemplate>
-                                                <Canvas />
-                                            </ItemsPanelTemplate>
-                                        </ItemsControl.ItemsPanel>
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="25"/>
+                                            <RowDefinition Height="75"/>
+                                        </Grid.RowDefinitions>
+                                        <local:CanvasItemsControl ItemsSource="{Binding Pattern}" Grid.Row="0" Height="25"
+                                                                  BindingPathLeft="Location" BindingConverterPosition="{StaticResource SamplesToPixelsConverter}">
+                                            <ItemsControl.ItemsPanel>
+                                                <ItemsPanelTemplate>
+                                                    <Canvas />
+                                                </ItemsPanelTemplate>
+                                            </ItemsControl.ItemsPanel>
 
-                                        <ItemsControl.ItemTemplate>
-                                            <DataTemplate>
-                                                <local:CanvasItemsControl ItemsSource="{Binding Beats}" BindingPathLeft="Location" BindingConverterPosition="{StaticResource SamplesToPixelsConverter}"
-                                                              Width="{Binding Measure, Converter={StaticResource SamplesToPixelsConverter}}">
-                                                
-                                                    <ItemsControl.ItemsPanel>
-                                                        <ItemsPanelTemplate>
-                                                            <Canvas Height="25">
-                                                                <Canvas.Background>
-                                                                    <LinearGradientBrush EndPoint="0,0.5" StartPoint="1,0.5">
-                                                                        <GradientStop Color="DarkMagenta"  Offset="0"/>
-                                                                        <GradientStop Color="Black" Offset="1"/>
-                                                                    </LinearGradientBrush>
-                                                                </Canvas.Background>
-                                                            </Canvas>
-                                                        </ItemsPanelTemplate>
-                                                    </ItemsControl.ItemsPanel>
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <local:CanvasItemsControl ItemsSource="{Binding Beats}" BindingPathLeft="Location" BindingConverterPosition="{StaticResource SamplesToPixelsConverter}"
+                                                                  Width="{Binding Measure, Converter={StaticResource SamplesToPixelsConverter}}">
+                                                        <ItemsControl.ItemsPanel>
+                                                            <ItemsPanelTemplate>
+                                                                <Canvas Height="25">
+                                                                    <Canvas.Background>
+                                                                        <LinearGradientBrush EndPoint="0,0.5" StartPoint="1,0.5">
+                                                                            <GradientStop Color="DarkMagenta"  Offset="0"/>
+                                                                            <GradientStop Color="Black" Offset="1"/>
+                                                                        </LinearGradientBrush>
+                                                                    </Canvas.Background>
+                                                                </Canvas>
+                                                            </ItemsPanelTemplate>
+                                                        </ItemsControl.ItemsPanel>
 
-                                                    <ItemsControl.ItemTemplate>
-                                                        <DataTemplate>
-                                                            <ToggleButton IsChecked="{Binding Beats, Mode=TwoWay}"
-                                                                        Width="{Binding BeatLength, Converter={StaticResource SamplesToPixelsConverter}}" Margin="2">
-                                                                <Image />
-                                                            </ToggleButton>
-                                                        </DataTemplate>
-                                                    </ItemsControl.ItemTemplate>
-                                                </local:CanvasItemsControl>
-                                            </DataTemplate>
-                                        </ItemsControl.ItemTemplate>
-                                    </local:CanvasItemsControl>
+                                                        <ItemsControl.ItemTemplate>
+                                                            <DataTemplate>
+                                                                <ToggleButton IsChecked="{Binding Beats, Mode=TwoWay}"
+                                                                            Width="{Binding BeatLength, Converter={StaticResource SamplesToPixelsConverter}}" Margin="2">
+                                                                    <Image />
+                                                                </ToggleButton>
+                                                            </DataTemplate>
+                                                        </ItemsControl.ItemTemplate>
+                                                    </local:CanvasItemsControl>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </local:CanvasItemsControl>
+                                    </Grid>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
-                    </Grid>
+                    </Canvas>
                 </ScrollViewer>
                 <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.ColumnSpan="2">
                     <ComboBox SelectedValue="{Binding AssetFile, Mode=TwoWay}">

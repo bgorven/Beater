@@ -78,5 +78,7 @@ namespace Beater.Models
                 PropertyChanged(this, args);
             }
         }
+
+        public int Location { get; set; }
     }
 }
