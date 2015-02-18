@@ -4,7 +4,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace Beater
+namespace Beater.Controls
 {
     class Command<TParameter> : ICommand
     {

@@ -21,9 +21,11 @@ namespace Beater.ViewModels
             Beats = new ObservableCollection<BeatViewModel>(BeatViewModel.BeatPattern(beat));
         }
 
-        public int BeatLength { get { return beat.BeatLength; } set { beat.BeatLength = value; } }
-        public int Measure { get { return beat.Measure; } set { beat.Measure = value; } }
+        public int BeatLength { get { return beat.BeatLength; } }
+        public int Measure { get { return beat.Measure; } }
         public ObservableCollection<BeatViewModel> Beats { get; private set; }
         public string Id { get { return beat.Id; } set { beat.Id = value; } }
+
+        public int Location { get; set; }
     }
 }

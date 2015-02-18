@@ -6,7 +6,7 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Data;
 using System.Linq;
 
-namespace Beater
+namespace Beater.Controls
 {
     public class BooleanToVisibilityConverter : IValueConverter
     {

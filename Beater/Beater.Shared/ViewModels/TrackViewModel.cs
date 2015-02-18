@@ -103,38 +103,48 @@ namespace Beater.ViewModels
         }
         #endregion
 
-        public async Task UpdateWave()
+        public async Task Update()
         {
-            var original = OriginalWave;
-
-            Wave = await Task.Run(() =>
+            Wave = await Task.Run(() => UpdateWave(OriginalWave));
+            foreach (var template in track.Templates)
             {
-                ISampleProvider processed = new Sample.Provider(original.Samples, original.WaveFormat);
+                template.BPM = BPM;
+            }
+            int location = 0;
+            foreach (var pattern in Pattern)
+            {
+                pattern.Location = location;
+                location += pattern.Measure;
+            }
+        }
 
-                if (original.WaveFormat.SampleRate != Sample.SamplesPerSecond)
-                {
-                    processed = new WdlResamplingSampleProvider(processed, Sample.SamplesPerSecond);
-                }
+        private Sample.Provider UpdateWave(Sample.Provider original)
+        {
+            ISampleProvider processed = new Sample.Provider(original.Samples, original.WaveFormat);
 
-                if (processed.WaveFormat.Channels == 1)
-                {
-                    processed = new MonoToStereoSampleProvider(processed);
-                }
-                else if (processed.WaveFormat.Channels > 2)
-                {
-                    throw new FormatException(processed.WaveFormat.Channels + " channel audio? What am I supposed to do with that?");
-                }
+            if (original.WaveFormat.SampleRate != Sample.SamplesPerSecond)
+            {
+                processed = new WdlResamplingSampleProvider(processed, Sample.SamplesPerSecond);
+            }
 
-                var newBufSize = (int)(original.Samples.Length
-                    * ((float)Sample.SamplesPerSecond / original.WaveFormat.SampleRate)
-                    * (2 / original.WaveFormat.Channels)
-                    * 2);
+            if (processed.WaveFormat.Channels == 1)
+            {
+                processed = new MonoToStereoSampleProvider(processed);
+            }
+            else if (processed.WaveFormat.Channels > 2)
+            {
+                throw new FormatException(processed.WaveFormat.Channels + " channel audio? What am I supposed to do with that?");
+            }
 
-                var newBuf = new float[newBufSize];
-                newBufSize = processed.Read(newBuf, 0, newBufSize);
-                Array.Resize(ref newBuf, newBufSize);
-                return new Sample.Provider(newBuf, Sample.WaveFormat);
-            });
+            var newBufSize = (int)(original.Samples.Length
+                * ((float)Sample.SamplesPerSecond / original.WaveFormat.SampleRate)
+                * (2 / original.WaveFormat.Channels)
+                * 2);
+
+            var newBuf = new float[newBufSize];
+            newBufSize = processed.Read(newBuf, 0, newBufSize);
+            Array.Resize(ref newBuf, newBufSize);
+            return new Sample.Provider(newBuf, Sample.WaveFormat);
         }
 
         public ObservableCollection<PatternViewModel> Pattern { get; private set; }

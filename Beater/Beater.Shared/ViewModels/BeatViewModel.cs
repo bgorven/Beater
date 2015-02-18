@@ -23,7 +23,7 @@ namespace Beater.ViewModels
 
         private Pattern model;
         private int index;
-        public long BeatLength { get { return model.BeatLength; } }
+        public int BeatLength { get { return model.BeatLength; } }
 
         public bool Beats
         {
@@ -34,5 +34,7 @@ namespace Beater.ViewModels
                 model.RaiseBeatsChanged();
             }
         }
+
+        public int Location { get { return BeatLength * index; } }
     }
 }

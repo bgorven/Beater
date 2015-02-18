@@ -9,41 +9,54 @@ namespace Beater.Models
 {
     class PatternTemplate : INotifyPropertyChanged
     {
-        public PatternTemplate(int BPM, bool beatsActive = false)
+        public PatternTemplate(int BPM)
         {
-            BeatLength = TimeSpan.FromMinutes(1).Samples() / BPM;
-            Measure = 4 * BeatLength;
-            Beats = new bool[4];
-            if (beatsActive)
-            {
-                for (int i = 0; i < Beats.Length; i++)
-                {
-                    Beats[i] = beatsActive;
-                }
-            }
+            _timingDenominator = 4;
+            _timingNumerator = 4;
+            _beats = new bool[4];
+            _bpm = BPM;
             Id = "#FFFFFF";
-            bpm = BPM;
         }
 
-        public Sample.Count BeatLength { get; set; }
-        public Sample.Count Measure { get; set; }
-        public bool[] Beats { get; set; }
+        private readonly string[] timing_properties = new string[] { "BPM", "TimingDenominator", "BeatLength", "Beats", "TimingNumerator", "Measure" };
+
+        private double _timingNumerator;
+        public double TimingNumerator
+        {
+            get { return TimingNumerator; }
+            set
+            {
+                _timingNumerator = value;
+                var beatCount = (int)Math.Floor(_timingNumerator);
+                Array.Resize(ref _beats, beatCount);
+                RaisePropertyChanged(timing_properties);
+            }
+        }
+        private double _timingDenominator;
+        public double TimingDenominator
+        {
+            get { return _timingDenominator; }
+            set
+            {
+                _timingDenominator = value;
+                RaisePropertyChanged(timing_properties);
+            }
+        }
+        public Sample.Count BeatLength { get { return (Sample.Count)((240.0 / _bpm) / _timingDenominator) * Sample.SamplesPerSecond; } }
+        public Sample.Count Measure { get { return (Sample.Count)(((240.0 / _bpm) / _timingDenominator) * _timingNumerator) * Sample.SamplesPerSecond; } }
+        private bool[] _beats;
+        public bool[] Beats { get { return _beats; } set { _beats = value; } }
         public string Id { get; set; }
 
         //special case: this is set globally rather than per track, so it gets updated differently.
-        private int bpm;
-        private string[] props;
+        private int _bpm;
         public int BPM
         {
-            get { return bpm; }
+            get { return _bpm; }
             set
             {
-                var ratio = ((double)value) / bpm;
-                bpm = value;
-                BeatLength = (int)(BeatLength * ratio);
-                Measure = (int)(Measure * ratio);
-                props = props ?? new string[] { "BPM", "BeatLength", "Measure" };
-                RaisePropertyChanged(props);
+                _bpm = value;
+                RaisePropertyChanged(timing_properties);
             }
         }
 

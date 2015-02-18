@@ -9,7 +9,7 @@ namespace Beater.Models
 {
     class Track
     {
-        public Track(string filename, TimeSpan length, TimeSpan offset, int BPM, bool beatsActive = false)
+        public Track(string filename, TimeSpan length, TimeSpan offset, int BPM)
         {
             if (!string.IsNullOrEmpty(filename))
             {
@@ -29,7 +29,7 @@ namespace Beater.Models
             Pattern = new List<Pattern>();
             Templates = new List<PatternTemplate>();
 
-            var template = new PatternTemplate(BPM, beatsActive);
+            var template = new PatternTemplate(BPM);
             Templates.Add(template);
             var l = Offset + template.Measure;
             while (l < Length)

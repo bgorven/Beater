@@ -14,6 +14,7 @@ using NAudio.Wave;
 using NAudio.Win8.Wave.WaveOutputs;
 using Beater.Audio;
 using Windows.UI.Core;
+using Beater.Controls;
 
 namespace Beater.ViewModels
 {
@@ -87,6 +88,13 @@ namespace Beater.ViewModels
                 Tracks[0].Wave = Tracks[0].OriginalWave;
                 Tracks[0].Pattern[0].Beats[0].Beats = true;
                 Tracks[0].Pattern[0].Beats[2].Beats = true;
+
+                int location = 0;
+                foreach (var pattern in Tracks[0].Pattern)
+                {
+                    pattern.Location = location;
+                    location += pattern.Measure;
+                }
             }
 
             try
@@ -234,7 +242,7 @@ namespace Beater.ViewModels
             path = Path.Combine(path, AssetFile + ".wav");
             var model = await Task.Run(() => new Track(path, Length, TimeSpan.Zero, BPM));
             var viewmodel = new TrackViewModel(model);
-            await viewmodel.UpdateWave();
+            await viewmodel.Update();
             Tracks.Add(viewmodel);
         }
         #endregion

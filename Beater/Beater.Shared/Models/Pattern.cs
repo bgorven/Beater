@@ -8,7 +8,7 @@ namespace Beater.Models
 {
     class Pattern : INotifyPropertyChanged, IDisposable
     {
-        public PatternTemplate Template;
+        public PatternTemplate Template { get; set; }
 
         public Pattern(PatternTemplate template)
         {
@@ -26,21 +26,11 @@ namespace Beater.Models
         public Sample.Count BeatLength
         {
             get { return Template.BeatLength; }
-            set
-            {
-                Template.BeatLength = value;
-                Template.RaisePropertyChanged("BeatLength");
-            }
         }
 
         public Sample.Count Measure
         {
             get { return Template.Measure; }
-            set
-            {
-                Template.Measure = value;
-                Template.RaisePropertyChanged("Measure");
-            }
         }
 
         /// <summary>
