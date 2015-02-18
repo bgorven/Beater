@@ -15,6 +15,11 @@
         <local:BooleanInverter x:Key="BooleanInverter" />
         <local:BooleanToVisibilityConverter x:Key="VisibilityConverter" />
         <local:BooleanToVisibilityConverter Invert="true" x:Key="InverseVisibilityConverter" />
+        <Style TargetType="TextBox" x:Key="PlainTextBox">
+            <Setter Property="Background" Value="{StaticResource ButtonBackgroundThemeBrush}"></Setter>
+            <Setter Property="BorderBrush"  Value="{StaticResource ButtonBackgroundThemeBrush}"></Setter>
+            <Setter Property="Foreground" Value="{StaticResource ButtonForegroundThemeBrush}"></Setter>
+        </Style>
     </Page.Resources>
     
     <Page.DataContext>
@@ -28,39 +33,15 @@
         </Grid.RowDefinitions>
         
         <StackPanel Orientation="Horizontal">
-            <Button Name="Play" Command="{Binding PlayCommand}">Play</Button>
-            <Button Name="Pause" Command="{Binding PauseCommand}">Pause</Button>
-            <Button Name="Stop" Command="{Binding StopCommand}">Stop</Button>
-            <Button Name="Save" Command="{Binding SaveCommand}">Save</Button>
-            <Button Name="Trash" Command="{Binding TrashCommand}">Trash</Button>
-            <TextBox Text="{Binding Title, Mode=TwoWay}" VerticalAlignment="Center">
-                <TextBox.Resources>
-                    <Style TargetType="TextBox" >
-                        <Setter Property="Background" Value="{StaticResource ButtonBackgroundThemeBrush}"></Setter>
-                        <Setter Property="BorderBrush"  Value="{StaticResource ButtonBackgroundThemeBrush}"></Setter>
-                        <Setter Property="Foreground" Value="{StaticResource ButtonForegroundThemeBrush}"></Setter>
-                    </Style>
-                </TextBox.Resources>
-            </TextBox>
-            
-            <TextBox Text="{Binding BPM, Mode=TwoWay}" VerticalAlignment="Center">
-                <TextBox.Resources>
-                    <Style TargetType="TextBox" >
-                        <Setter Property="Background" Value="{StaticResource ButtonBackgroundThemeBrush}"></Setter>
-                        <Setter Property="BorderBrush"  Value="{StaticResource ButtonBackgroundThemeBrush}"></Setter>
-                        <Setter Property="Foreground" Value="{StaticResource ButtonForegroundThemeBrush}"></Setter>
-                    </Style>
-                </TextBox.Resources>
-            </TextBox>
-            <TextBox Text="{Binding Length, Mode=TwoWay}" VerticalAlignment="Center">
-                <TextBox.Resources>
-                    <Style TargetType="TextBox" >
-                        <Setter Property="Background" Value="{StaticResource ButtonBackgroundThemeBrush}"></Setter>
-                        <Setter Property="BorderBrush"  Value="{StaticResource ButtonBackgroundThemeBrush}"></Setter>
-                        <Setter Property="Foreground" Value="{StaticResource ButtonForegroundThemeBrush}"></Setter>
-                    </Style>
-                </TextBox.Resources>
-            </TextBox>
+            <Button Command="{Binding PlayCommand}">Play</Button>
+            <Button Command="{Binding PauseCommand}">Pause</Button>
+            <Button Command="{Binding StopCommand}">Stop</Button>
+            <Button Command="{Binding SaveCommand}">Save</Button>
+            <Button Command="{Binding TrashCommand}">Trash</Button>
+            <TextBox Text="{Binding Title, Mode=TwoWay}" VerticalAlignment="Center" Margin="1,0"/>
+            <TextBox Text="{Binding BPM, Mode=TwoWay}" VerticalAlignment="Center" Margin="1,0"/>
+            <TextBox Text="{Binding PlayProgress, Mode=TwoWay}" VerticalAlignment="Center" Margin="1,0"/>
+            <TextBox Text="{Binding Length, Mode=TwoWay}" VerticalAlignment="Center" Margin="1,0"/>
         </StackPanel>
         <ScrollViewer Grid.Row="1" VerticalScrollMode="Auto" VerticalScrollBarVisibility="Auto">
             <Grid>
@@ -79,8 +60,12 @@
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
+                <Line Grid.Column="1" Grid.Row="0" Stroke="White" StrokeThickness="5" Canvas.ZIndex="1" 
+                      Y1="0" Y2="{Binding ActualHeight, ElementName=TrackContainer}"
+                      X1="{Binding Progress, Converter={StaticResource SamplesToPixelsConverter}}" 
+                      X2="{Binding Progress, Converter={StaticResource SamplesToPixelsConverter}}" />
                 <ScrollViewer HorizontalScrollMode="Auto" VerticalScrollMode="Disabled" HorizontalScrollBarVisibility="Auto" 
-                              Grid.Row="0" Grid.Column="1">
+                              Grid.Row="0" Grid.Column="1" Name="TrackContainer" Canvas.ZIndex="0">
                     <ItemsControl ItemsSource="{Binding Tracks}">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
@@ -95,10 +80,7 @@
 
                                     <ItemsControl.ItemTemplate>
                                         <DataTemplate>
-                                            <ItemsControl ItemsSource="{Binding Beats}" 
-                                                              ScrollViewer.HorizontalScrollMode="Disabled" ScrollViewer.VerticalScrollMode="Disabled">
-
-
+                                            <ItemsControl ItemsSource="{Binding Beats}">
                                                 <ItemsControl.ItemsPanel>
                                                     <ItemsPanelTemplate>
                                                         <StackPanel Orientation="Horizontal">
@@ -115,7 +97,7 @@
                                                 <ItemsControl.ItemTemplate>
                                                     <DataTemplate>
                                                         <ToggleButton IsChecked="{Binding Beats, Mode=TwoWay}"
-                                                                    Width="{Binding BeatLength, Converter={StaticResource SamplesToPixelsConverter}}">
+                                                                    Width="{Binding BeatLength, Converter={StaticResource SamplesToPixelsConverter}}" Margin="2">
                                                             <Image />
                                                         </ToggleButton>
                                                     </DataTemplate>

@@ -102,10 +102,10 @@ namespace Beater.ViewModels
         public ObservableCollection<TrackViewModel> Tracks { get; private set; }
 
         #region Audio
-        public Sample.Count Progress { get; private set; }
+        public int Progress { get; private set; }
         public TimeSpan PlayProgress
         {
-            get { return Progress.Time(); }
+            get { return ((Sample.Count)Progress).Time(); }
             set
             {
                 Progress = value.Samples();
