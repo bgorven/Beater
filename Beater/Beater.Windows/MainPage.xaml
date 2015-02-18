@@ -62,7 +62,7 @@
                 </TextBox.Resources>
             </TextBox>
         </StackPanel>
-        <ScrollViewer Grid.Row="1" HorizontalScrollMode="Disabled" VerticalScrollMode="Auto">
+        <ScrollViewer Grid.Row="1" VerticalScrollMode="Auto" VerticalScrollBarVisibility="Auto">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto"/>
@@ -70,87 +70,64 @@
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="auto"/>
-                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <ListView ItemsSource="{Binding Tracks}" Grid.Row="0" Grid.Column="0"
-                          ScrollViewer.HorizontalScrollMode="Disabled" ScrollViewer.VerticalScrollMode="Disabled">
-                    <ListView.ItemTemplate>
+                <ItemsControl ItemsSource="{Binding Tracks}" Grid.Row="0" Grid.Column="0">
+                    <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding Name}" />
+                            <TextBlock Text="{Binding Name}" Height="100" FontSize="16"/>
                         </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
-                <ListView ItemsSource="{Binding Tracks}" Grid.Row="0" Grid.Column="1"
-                          ScrollViewer.HorizontalScrollMode="Enabled" ScrollViewer.VerticalScrollMode="Disabled">
-                    <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <ListView ItemsSource="{Binding Pattern}" Grid.Column="1" ScrollViewer.HorizontalScrollMode="Disabled" ScrollViewer.VerticalScrollMode="Disabled">
-                                <ListView.ItemsPanel>
-                                    <ItemsPanelTemplate>
-                                        <StackPanel Orientation="Horizontal" />
-                                    </ItemsPanelTemplate>
-                                </ListView.ItemsPanel>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+                <ScrollViewer HorizontalScrollMode="Auto" VerticalScrollMode="Disabled" HorizontalScrollBarVisibility="Auto" 
+                              Grid.Row="0" Grid.Column="1">
+                    <ItemsControl ItemsSource="{Binding Tracks}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <ItemsControl ItemsSource="{Binding Pattern}" Grid.Column="1" 
+                                          Height="100" Width="{Binding Length, Converter={StaticResource SamplesToPixelsConverter}}"
+                                          ScrollViewer.HorizontalScrollMode="Disabled" ScrollViewer.VerticalScrollMode="Disabled">
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <StackPanel Orientation="Horizontal" />
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
 
-                                <ListView.ItemContainerStyle>
-                                    <Style TargetType="ListViewItem">
-                                        <Setter Property="Padding" Value="0"/>
-                                        <Setter Property="Margin" Value="0"/>
-                                        <Setter Property="Template">
-                                            <Setter.Value>
-                                                <ControlTemplate TargetType="ListViewItem">
-                                                    <ListViewItemPresenter ContentMargin="0"
-                                                                           Padding="0" />
-                                                </ControlTemplate>
-                                            </Setter.Value>
-                                        </Setter>
-                                    </Style>
-                                </ListView.ItemContainerStyle>
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <ItemsControl ItemsSource="{Binding Beats}" 
+                                                              ScrollViewer.HorizontalScrollMode="Disabled" ScrollViewer.VerticalScrollMode="Disabled">
 
-                                <ListView.ItemTemplate>
-                                    <DataTemplate>
-                                        <ListView ItemsSource="{Binding Beats}" 
-                                                      ScrollViewer.HorizontalScrollMode="Disabled" ScrollViewer.VerticalScrollMode="Disabled">
-                                            <ListView.Background>
-                                                <LinearGradientBrush EndPoint="0,0.5" StartPoint="1,0.5">
-                                                    <GradientStop Color="DarkMagenta"  Offset="0"/>
-                                                    <GradientStop Color="Black" Offset="1"/>
-                                                </LinearGradientBrush>
-                                            </ListView.Background>
-                                            <ListView.ItemsPanel>
-                                                <ItemsPanelTemplate>
-                                                    <StackPanel Orientation="Horizontal" />
-                                                </ItemsPanelTemplate>
-                                            </ListView.ItemsPanel>
 
-                                            <ListView.ItemContainerStyle>
-                                                <Style TargetType="ListViewItem">
-                                                    <Setter Property="Padding" Value="0"/>
-                                                    <Setter Property="Margin" Value="0"/>
-                                                    <Setter Property="Template">
-                                                        <Setter.Value>
-                                                            <ControlTemplate TargetType="ListViewItem">
-                                                                <ListViewItemPresenter ContentMargin="0"
-                                                                           Padding="0" />
-                                                            </ControlTemplate>
-                                                        </Setter.Value>
-                                                    </Setter>
-                                                </Style>
-                                            </ListView.ItemContainerStyle>
-                                            <ListView.ItemTemplate>
-                                                <DataTemplate>
-                                                    <ToggleButton IsChecked="{Binding Beats, Mode=TwoWay}"
-                                                            Width="{Binding BeatLength, Converter={StaticResource SamplesToPixelsConverter}}">
-                                                        <Image />
-                                                    </ToggleButton>
-                                                </DataTemplate>
-                                            </ListView.ItemTemplate>
-                                        </ListView>
-                                    </DataTemplate>
-                                </ListView.ItemTemplate>
-                            </ListView>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
+                                                <ItemsControl.ItemsPanel>
+                                                    <ItemsPanelTemplate>
+                                                        <StackPanel Orientation="Horizontal">
+                                                            <StackPanel.Background>
+                                                                <LinearGradientBrush EndPoint="0,0.5" StartPoint="1,0.5">
+                                                                    <GradientStop Color="DarkMagenta"  Offset="0"/>
+                                                                    <GradientStop Color="Black" Offset="1"/>
+                                                                </LinearGradientBrush>
+                                                            </StackPanel.Background>
+                                                        </StackPanel>
+                                                    </ItemsPanelTemplate>
+                                                </ItemsControl.ItemsPanel>
+
+                                                <ItemsControl.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <ToggleButton IsChecked="{Binding Beats, Mode=TwoWay}"
+                                                                    Width="{Binding BeatLength, Converter={StaticResource SamplesToPixelsConverter}}">
+                                                            <Image />
+                                                        </ToggleButton>
+                                                    </DataTemplate>
+                                                </ItemsControl.ItemTemplate>
+                                            </ItemsControl>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
                 <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.ColumnSpan="2">
                     <ComboBox SelectedValue="{Binding AssetFile, Mode=TwoWay}">
                         <x:String>Closed Hat</x:String>

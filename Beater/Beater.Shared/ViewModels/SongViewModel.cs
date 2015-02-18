@@ -61,8 +61,15 @@ namespace Beater.ViewModels
         /// <summary>
         /// Creates sample data for testing/editor
         /// </summary>
-        public SongViewModel()
+        public SongViewModel() : this(null) { }
+
+        public SongViewModel(string defaultWave)
         {
+            if (defaultWave != null && !defaultWave.Contains("\\"))
+            {
+                defaultWave = Path.Combine(Package.Current.InstalledLocation.Path, "Assets\\" + defaultWave + ".wav");
+            }
+
             PlayCommand = new Command(CanPlay, Play);
             PauseCommand = new Command(CanPause, Pause);
             StopCommand = new Command(CanStop, Stop);
@@ -73,13 +80,13 @@ namespace Beater.ViewModels
             Tracks = new ObservableCollection<TrackViewModel>(song.Tracks.Select(model => new TrackViewModel(model)));
             provider = new SongSampleProvider(this);
 
-            string kick = Path.Combine(Package.Current.InstalledLocation.Path, "Assets\\Kick.wav");
-
             if (song.Tracks.Count == 0)
             {
-                song.Tracks.Add(new Track(kick, Length, TimeSpan.Zero, BPM));
+                song.Tracks.Add(new Track(defaultWave, Length, TimeSpan.Zero, BPM));
                 Tracks.Add(new TrackViewModel(song.Tracks[0]));
                 Tracks[0].Wave = Tracks[0].OriginalWave;
+                Tracks[0].Pattern[0].Beats[0].Beats = true;
+                Tracks[0].Pattern[0].Beats[2].Beats = true;
             }
 
             try
@@ -114,7 +121,11 @@ namespace Beater.ViewModels
             Progress = p % SampleCount;
             if (UIThread != null)
             {
-                var ignore = UIThread.RunAsync(CoreDispatcherPriority.Normal, () => RaisePropertyChanged("PlayProgress"));
+                var ignore = UIThread.RunAsync(CoreDispatcherPriority.Normal, () =>
+                {
+                    RaisePropertyChanged("PlayProgress");
+                    RaisePropertyChanged("Progress");
+                });
             }
         }
 

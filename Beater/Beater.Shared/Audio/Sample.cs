@@ -36,6 +36,33 @@ namespace Beater.Audio
             public TimeSpan Time(){
                 return checked(TimeSpan.FromTicks(Value * TimeSpan.TicksPerSecond / Sample.SamplesPerSecond));
             }
+
+            public bool Equals(Count other)
+            {
+                return this.Value == other.Value;
+            }
+
+            public override string ToString()
+            {
+                return Value.ToString() + " samples";
+            }
+
+            public override bool Equals(object obj)
+            {
+                if (obj is Count)
+                {
+                    return this.Equals((Count)obj);
+                }
+                else
+                {
+                    return false;
+                }
+            }
+
+            public override int GetHashCode()
+            {
+                return Value.GetHashCode();
+            }
         }
 
         public static Count Samples(this TimeSpan val){
