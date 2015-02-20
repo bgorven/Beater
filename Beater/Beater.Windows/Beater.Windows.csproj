@@ -115,6 +115,9 @@
     <None Include="Beater.Windows_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\beats.svg" />
+    <Content Include="Assets\SplashScreen.scale-100.png" />
+    <Content Include="Assets\beatsDark.svg" />
     <Content Include="Assets\Closed Hat.wav" />
     <Content Include="Assets\Crash Cymbal.wav" />
     <Content Include="Assets\Floor Tom.wav" />
@@ -128,7 +131,6 @@
     <Content Include="Assets\Sample 1.wav" />
     <Content Include="Assets\Sample 2.wav" />
     <Content Include="Assets\SmallLogo.scale-100.png" />
-    <Content Include="Assets\SplashScreen.scale-100.png" />
     <Content Include="Assets\StoreLogo.scale-100.png" />
   </ItemGroup>
   <ItemGroup>
