@@ -2,6 +2,12 @@
     x:Class="Beater.App"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:Beater">
-
+    xmlns:local="using:Beater.Views">
+    
+    <Application.Resources>
+        <local:NumericScaleConverter Scale="0.00048828125"  x:Key="SamplesToPixelsConverter" />
+        <local:BooleanInverter x:Key="BooleanInverter" />
+        <local:BooleanToVisibilityConverter x:Key="VisibilityConverter" />
+        <local:BooleanToVisibilityConverter Invert="true" x:Key="InverseVisibilityConverter" />
+    </Application.Resources>
 </Application>

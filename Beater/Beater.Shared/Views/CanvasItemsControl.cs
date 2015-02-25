@@ -5,7 +5,7 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Data;
 
-namespace Beater.Controls
+namespace Beater.Views
 {
     class CanvasItemsControl : ItemsControl
     {

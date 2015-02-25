@@ -14,6 +14,7 @@ namespace Beater.ViewModels
 
         public override event PropertyChangedEventHandler PropertyChanged;
 
+        public PatternViewModel() : this(new Pattern(new PatternTemplate(60))) { }
         public PatternViewModel(Pattern model)
         {
             pattern = model;

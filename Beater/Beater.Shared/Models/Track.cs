@@ -9,6 +9,8 @@ namespace Beater.Models
 {
     class Track
     {
+        public Track() : this("Default", TimeSpan.FromSeconds(36), TimeSpan.Zero, 60) { }
+
         public Track(string filename, TimeSpan length, TimeSpan offset, int bpm)
         {
             Filename = filename;

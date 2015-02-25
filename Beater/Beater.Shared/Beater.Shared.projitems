@@ -18,9 +18,9 @@
     <Compile Include="$(MSBuildThisFileDirectory)Audio\Sample.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Audio\SongSampleProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Audio\TrackSampleProvider.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Controls\CanvasItemsControl.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Controls\Command.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Controls\Converters.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Views\CanvasItemsControl.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Views\Command.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Views\Converters.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logger.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Pattern.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\PatternTemplate.cs" />

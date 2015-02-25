@@ -15,6 +15,12 @@ namespace Beater.ViewModels
     {
         Track track;
 
+        public TrackViewModel() : this(new Track())
+        {
+            UpdatePattern();
+            Pattern[0].Beats[1].Beats = true;
+        }
+
         public TrackViewModel(Track model)
         {
             track = model;

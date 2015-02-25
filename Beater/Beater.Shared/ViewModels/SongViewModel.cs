@@ -14,7 +14,7 @@ using NAudio.Wave;
 using NAudio.Win8.Wave.WaveOutputs;
 using Beater.Audio;
 using Windows.UI.Core;
-using Beater.Controls;
+using Beater.Views;
 using System.Threading;
 
 namespace Beater.ViewModels
