@@ -21,51 +21,49 @@ namespace Beater.Audio
             foreach (var pattern in _track.Pattern)
             {
                 var patternEnd = location + pattern.Measure;
-                //if (patternEnd > bufStart)
-                //{
-                    foreach (var beat in pattern.Beats)
+                foreach (var beat in pattern.Beats)
+                {
+                    if (beat.Beats)
                     {
-                        if (beat.Beats)
+                        var startOffset = location - bufStart;
+                        var samplesAvailable = _track.Wave.Samples.Length - startOffset;
+                        var readEnd = (bufStart + Math.Min(count, samplesAvailable));
+
+                        if (startOffset < 0)
                         {
-                            var startOffset = location - bufStart;
-                            var samplesAvailable = _track.Wave.Samples.Length - startOffset;
-                            var readEnd = (bufStart + Math.Min(count, samplesAvailable));
-
-                            if (startOffset < 0)
+                            //beat starts before buffer, begin read -startOffset samples into wave.
+                            if (samplesAvailable > 0)
                             {
-                                //beat starts before buffer, begin read -startOffset samples into wave.
-                                if (samplesAvailable > 0)
-                                {
-                                    _track.Wave.MixTo(-startOffset, buffer, offset, Math.Min(count, samplesAvailable));
-                                }
+                                _track.Wave.MixTo(-startOffset, buffer, offset, Math.Min(count, samplesAvailable));
                             }
-                            else if (count - startOffset > 0)
-                            {
-                                //beat starts after buffer, place read +startOffset samples into buffer.
-                                _track.Wave.MixTo(0, buffer, offset + startOffset, count - startOffset);
-                            }
-                            else
-                            {
-                                var beatStart = location;
-                                var beatEnd = beatStart + _track.Wave.Samples.Length;
-                                if (beatStart < bufEnd && beatEnd > bufStart)
-                                {
-                                    ;
-                                }
-                            }
-
+                        }
+                        else if (count - startOffset > 0)
+                        {
+                            //beat starts after buffer, place read +startOffset samples into buffer.
+                            _track.Wave.MixTo(0, buffer, offset + startOffset, count - startOffset);
                         }
                         else
                         {
-                            ;
+                            var beatStart = location;
+                            var beatEnd = beatStart + _track.Wave.Samples.Length;
+                            if (beatStart < bufEnd && beatEnd > bufStart)
+                            {
+                                ;
+                            }
                         }
-                        location += pattern.BeatLength;
-                        if (location >= bufEnd)
-                        {
-                            return;
-                        }
+
                     }
-                //}
+                    else
+                    {
+                        ;
+                    }
+                    location += pattern.BeatLength;
+                    if (location >= bufEnd)
+                    {
+                        return;
+                    }
+                }
+
                 location = patternEnd;
                 if (location >= bufEnd) return;
             }

@@ -23,46 +23,9 @@ namespace Beater.ViewModels
     {
         private Song song = new Song { BPM = 60, Length = TimeSpan.FromSeconds(36).Samples(), Title = "Untitled", Tracks = new List<Track>() };
 
-        #region Model Properties
-        public int BPM
-        {
-            get { return song.BPM; }
-            set
-            {
-                song.BPM = value;
-                RaisePropertyChanged("BPM");
-            }
-        }
-
-        public TimeSpan Length
-        {
-            get { return song.Length.Time(); }
-            set
-            {
-                song.Length = value.Samples();
-                RaisePropertyChanged("Length");
-            }
-        }
-
-        public int SampleCount
-        {
-            get { return song.Length; }
-        }
-
-        public string Title
-        {
-            get { return song.Title; }
-            set
-            {
-                song.Title = value;
-                RaisePropertyChanged("Title");
-            }
-        }
-        #endregion
-
         public SongViewModel()
         {
-            var defaultWave = Path.Combine(Package.Current.InstalledLocation.Path, "Assets\\" + "Kick.wav");
+            string defaultWave = "ms-appx:///Assets/Kick.wav";
 
             PlayCommand = new Command(CanPlay, Play);
             PauseCommand = new Command(CanPause, Pause);
@@ -76,7 +39,7 @@ namespace Beater.ViewModels
 
             if (song.Tracks.Count == 0)
             {
-                song.Tracks.Add(new Track(defaultWave, Length, TimeSpan.Zero, BPM));
+                song.Tracks.Add(new Track(defaultWave, Length, 0, BPM));
                 Tracks.Add(new TrackViewModel(song.Tracks[0]));
                 Tracks[0].UpdatePattern();
                 Tracks[0].Pattern[0].Beats[0].Beats = true;
@@ -94,8 +57,52 @@ namespace Beater.ViewModels
                     }
                 });
             }
-            catch (Exception) { }
+            catch (Exception é)
+            {
+                Logger.Log(é);
+            }
         }
+
+
+        #region Model Properties
+        public double BPM
+        {
+            get { return song.BPM; }
+            set
+            {
+                song.BPM = value;
+                foreach (var track in Tracks) track.BPM = value;
+                RaisePropertyChanged("BPM");
+            }
+        }
+
+        public TimeSpan Time
+        {
+            get { return song.Length.Time(); }
+            set
+            {
+                var length = value.Samples();
+                song.Length = length;
+                foreach (var track in Tracks) track.Length = length;
+                RaisePropertyChanged(new string[] { "Time", "Length" });
+            }
+        }
+
+        public int Length
+        {
+            get { return song.Length; }
+        }
+
+        public string Title
+        {
+            get { return song.Title; }
+            set
+            {
+                song.Title = value;
+                RaisePropertyChanged("Title");
+            }
+        }
+        #endregion
 
         private CoreDispatcher UIThread;
 
@@ -118,7 +125,7 @@ namespace Beater.ViewModels
 
         internal void SetProgress(int p)
         {
-            Progress = p % SampleCount;
+            Progress = p % Length;
             if (UIThread != null)
             {
                 var ignore = UIThread.RunAsync(CoreDispatcherPriority.Normal, () =>
@@ -166,7 +173,7 @@ namespace Beater.ViewModels
             if (e.Exception != null)
             {
                 var temp = Interlocked.Exchange(ref player, null);
-                player.Dispose();
+                temp.Dispose();
             }
         }
 
@@ -245,7 +252,7 @@ namespace Beater.ViewModels
             var filename = Path.Combine(Package.Current.InstalledLocation.Path, "Assets");
             filename = Path.Combine(filename, AssetFile + ".wav");
 
-            var viewmodel = new TrackViewModel(new Track(filename, Length, TimeSpan.Zero, BPM));
+            var viewmodel = new TrackViewModel(new Track(filename, Length, 0, BPM));
             await viewmodel.Update();
             Tracks.Add(viewmodel);
         }

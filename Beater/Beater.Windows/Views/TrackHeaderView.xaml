@@ -7,18 +7,30 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    d:DesignHeight="300"
-    d:DesignWidth="400">
+    d:DesignHeight="100"
+    d:DesignWidth="1000">
     
     <d:UserControl.DataContext>
-        <viewmodel:TrackViewModel />
+        <viewmodel:TrackViewModel Height="25"/>
     </d:UserControl.DataContext>
 
-    <Grid>
+    <Grid Name="RootGrid">
         <Grid.RowDefinitions>
             <RowDefinition Height="25" />
-            <RowDefinition Height="75" />
+            <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
-        <TextBlock Text="{Binding Name}" VerticalAlignment="Center" FontSize="16" Grid.Row="0"/>
+        <TextBox Text="{Binding Name, Mode=TwoWay}" VerticalAlignment="Center" FontSize="16" Grid.Row="0" />
+        <Rectangle Grid.Row="1" Height="{Binding Height}" />
+        <Canvas Width="2" Height="25" Background="Blue" HorizontalAlignment="Right" VerticalAlignment="Top" Grid.Row="1" >
+            <StackPanel Canvas.Left="0" Canvas.Top="0" Orientation="Horizontal" SizeChanged="TemplateContainer_SizeChanged">
+                <TextBox Text="{Binding CurrentTemplate.TimingNumerator, Mode=TwoWay}" FontSize="14" />
+                <TextBlock Text="/" FontSize="14" VerticalAlignment="Center" />
+                <TextBox Text="{Binding CurrentTemplate.TimingDenominator, Mode=TwoWay}" FontSize="14"/>
+                <TextBlock Text="+" FontSize="14" VerticalAlignment="Center" />
+                <TextBox Text="{Binding OffsetTime, Mode=TwoWay}" FontSize="14"/>
+                <Rectangle Fill="{Binding CurrentTemplate.Id}" Height="25" Width="25" Margin="4,0,2,0" />
+                <TextBox Text="{Binding CurrentTemplate.Id}" FontSize="14"/>
+            </StackPanel>
+        </Canvas>
     </Grid>
 </UserControl>

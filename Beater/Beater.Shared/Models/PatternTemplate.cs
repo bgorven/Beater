@@ -9,29 +9,47 @@ namespace Beater.Models
 {
     class PatternTemplate : INotifyPropertyChanged
     {
-        public PatternTemplate(int BPM)
+        public PatternTemplate() : this(60) { }
+
+        public PatternTemplate(double BPM)
         {
             _timingDenominator = 4;
             _timingNumerator = 4;
             _beats = new bool[4];
             _bpm = BPM;
-            Id = "#FFFFFF";
+            var color = new byte[3];
+            _rand.NextBytes(color);
+            Id = Windows.UI.Color.FromArgb(0, color[0], color[1], color[2]).ToString();
+            PendingChanges = true;
         }
 
-        private readonly string[] timing_properties = new string[] { "BPM", "TimingDenominator", "BeatLength", "Beats", "TimingNumerator", "Measure" };
+
+        private static readonly Random _rand = new Random();
 
         private double _timingNumerator;
         public double TimingNumerator
         {
-            get { return TimingNumerator; }
+            get { return _timingNumerator; }
             set
             {
                 _timingNumerator = value;
                 var beatCount = (int)Math.Floor(_timingNumerator);
                 Array.Resize(ref _beats, beatCount);
-                RaisePropertyChanged(timing_properties);
+                TimingChanged();
             }
         }
+
+        /// <summary>
+        /// Set by the template when in is changed, cleared by the viewmodel when it updates.
+        /// </summary>
+        public bool PendingChanges { get; set; }
+        private void TimingChanged()
+        {
+            PendingChanges = true;
+            RaisePropertyChanged(timing_properties);
+        }
+        private static readonly string[] timing_properties = new string[] { "BPM", "TimingDenominator", "BeatLength", "Beats", "TimingNumerator", "Measure", "Location" };
+
         private double _timingDenominator;
         public double TimingDenominator
         {
@@ -39,24 +57,33 @@ namespace Beater.Models
             set
             {
                 _timingDenominator = value;
-                RaisePropertyChanged(timing_properties);
+                TimingChanged();
             }
         }
-        public Sample.Count BeatLength { get { return (Sample.Count)((240.0 / _bpm) / _timingDenominator) * Sample.SamplesPerSecond; } }
-        public Sample.Count Measure { get { return (Sample.Count)(((240.0 / _bpm) / _timingDenominator) * _timingNumerator) * Sample.SamplesPerSecond; } }
+        public Sample.Count BeatLength { get { return (Sample.Count)(((240.0 / _bpm) / _timingDenominator) * Sample.SamplesPerSecond); } }
+        public Sample.Count Measure { get { return (Sample.Count)((((240.0 / _bpm) / _timingDenominator) * _timingNumerator) * Sample.SamplesPerSecond); } }
         private bool[] _beats;
         public bool[] Beats { get { return _beats; } set { _beats = value; } }
-        public string Id { get; set; }
+        private string _id;
+        public string Id
+        {
+            get { return _id; }
+            set
+            {
+                _id = value;
+                RaisePropertyChanged("Id");
+            }
+        }
 
         //special case: this is set globally rather than per track, so it gets updated differently.
-        private int _bpm;
-        public int BPM
+        private double _bpm;
+        public double BPM
         {
             get { return _bpm; }
             set
             {
                 _bpm = value;
-                RaisePropertyChanged(timing_properties);
+                TimingChanged();
             }
         }
 

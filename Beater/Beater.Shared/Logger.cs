@@ -12,5 +12,10 @@ namespace Beater
         {
             _log.Add(message);
         }
+
+        internal static void Log(Exception é)
+        {
+            _log.Add(é.Message);
+        }
     }
 }

@@ -23,5 +23,15 @@ namespace Beater.Views
         {
             this.InitializeComponent();
         }
+
+        private void TemplateContainer_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            RootGrid.RowDefinitions[1].Height = new GridLength(e.NewSize.Height);
+            var track = DataContext as Beater.ViewModels.TrackViewModel;
+            if (track != null)
+            {
+                track.Height = e.NewSize.Height;
+            }
+        }
     }
 }

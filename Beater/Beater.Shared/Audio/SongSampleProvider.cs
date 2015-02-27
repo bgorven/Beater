@@ -25,7 +25,7 @@ namespace Beater.Audio
         {
             for (var i = offset; i < offset + count && i < buffer.Length; i++) buffer[i] = 0;
 
-            var countToEnd = Math.Min(count, _song.SampleCount - _song.Progress);
+            var countToEnd = Math.Min(count, _song.Length - _song.Progress);
             var countFromStart = count - countToEnd;
 
             MixTo(_song.Progress, buffer, offset, countToEnd);

@@ -26,6 +26,23 @@ namespace Beater.ViewModels
             track = model;
             Pattern = new ObservableCollection<PatternViewModel>(model.Pattern.Select(beat => new PatternViewModel(beat)));
             Provider = new TrackSampleProvider(this);
+            PropertyChanged += TrackViewModel_PropertyChanged;
+        }
+
+        async void TrackViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            await Update();
+        }
+
+        private PatternTemplate _currentTemplate;
+        public PatternTemplate CurrentTemplate
+        {
+            get { return _currentTemplate; }
+            set
+            {
+                _currentTemplate = value;
+                RaisePropertyChanged("CurrentTemplate");
+            }
         }
 
         #region Model Properties
@@ -49,17 +66,28 @@ namespace Beater.ViewModels
             }
         }
 
-        public int Offset
+        public Sample.Count Offset
         {
             get { return track.Offset; }
             set
             {
                 track.Offset = value;
+                SetChanges();
                 RaisePropertyChanged("Offset");
             }
         }
 
-        public int BPM
+        public TimeSpan OffsetTime
+        {
+            get { return Offset.Time(); }
+            set
+            {
+                Offset = value.Samples();
+                RaisePropertyChanged("OffsetTime");
+            }
+        }
+
+        public double BPM
         {
             get { return track.BPM; }
             set
@@ -76,13 +104,6 @@ namespace Beater.ViewModels
             {
                 track.Length = value;
                 RaisePropertyChanged("Length");
-                for (long t = Offset, i = 0; t < Length ; t += Pattern[(int)i].Measure, i++ )
-                {
-                    if (Pattern.Count <= i)
-                    {
-                        if (track.Templates.Count == 0) track.Templates.Add(new PatternTemplate(BPM));
-                    }
-                }
             }
         }
 
@@ -109,12 +130,33 @@ namespace Beater.ViewModels
         }
         #endregion
 
+        private bool _pendingChanges;
+        public bool PendingChanges
+        {
+            get { return _pendingChanges || track.Templates.Any(t => t.PendingChanges); }
+        }
+        public void SetChanges() { _pendingChanges = true; }
+        public void ClearChanges()
+        {
+            _pendingChanges = false;
+            foreach (var t in track.Templates) t.PendingChanges = false;
+        }
+
+        private string _previousFileName = null;
         public async Task Update()
         {
-            if (Filename != null)
+            if (Filename != null && Filename != _previousFileName)
             {
-                OriginalWave = await Task.Run(() => new Sample.Provider(Filename));
-                Wave = await Task.Run(() => UpdateWave(OriginalWave));
+                _previousFileName = Filename;
+                try
+                {
+                    OriginalWave = await Task.Run(() => new Sample.Provider(Filename));
+                    Wave = await Task.Run(() => UpdateWave(OriginalWave));
+                }
+                catch (Exception é)
+                {
+                    Logger.Log(é);
+                }
             }
 
             UpdatePattern();
@@ -124,12 +166,17 @@ namespace Beater.ViewModels
         {
             foreach (var template in track.Templates)
             {
-                template.BPM = BPM;
+                if (template.BPM != BPM) template.BPM = BPM;
             }
             if (track.Templates.Count == 0)
             {
-                track.Templates.Add(new PatternTemplate(BPM));
+                AddTemplate();
+                CurrentTemplate = track.Templates[0];
             }
+
+            if (!PendingChanges) return;
+            ClearChanges();
+
             int location = 0;
             foreach (var pattern in Pattern)
             {
@@ -144,6 +191,13 @@ namespace Beater.ViewModels
                 Pattern.Add(new PatternViewModel(pattern) { Location = location });
                 location += pattern.Measure;
             }
+        }
+
+        private void AddTemplate()
+        {
+            var template = new PatternTemplate(BPM);
+            template.PropertyChanged += TrackViewModel_PropertyChanged;
+            track.Templates.Add(template);
         }
 
         private Sample.Provider UpdateWave(Sample.Provider original)
@@ -176,5 +230,16 @@ namespace Beater.ViewModels
         }
 
         public ObservableCollection<PatternViewModel> Pattern { get; private set; }
+
+        private double _height;
+        public double Height
+        {
+            get { return _height; }
+            set
+            {
+                _height = value;
+                RaisePropertyChanged("Height");
+            }
+        }
     }
 }

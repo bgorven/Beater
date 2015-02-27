@@ -10,7 +10,7 @@ namespace Beater.Models
     {
         public Sample.Count Length { get; set; }
 
-        public int BPM { get; set; }
+        public double BPM { get; set; }
 
         public string Title { get; set; }
 

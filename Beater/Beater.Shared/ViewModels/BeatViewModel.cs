@@ -14,27 +14,30 @@ namespace Beater.ViewModels
             return beat.Beats.Select((b, i) => new BeatViewModel(beat, i));
         }
 
-        private BeatViewModel(Pattern beat, int number)
+        private BeatViewModel(Pattern pattern, int number)
         {
-            model = beat;
-            index = number;
-            beat.PropertyChanged += PropagatePropertyChanged;
+            _pattern = pattern;
+            _beats = pattern.Beats;
+            _index = number;
+            pattern.PropertyChanged += PropagatePropertyChanged;
         }
 
-        private Pattern model;
-        private int index;
-        public int BeatLength { get { return model.BeatLength; } }
+        private Pattern _pattern;
+        private bool[] _beats;
+        private int _index;
 
         public bool Beats
         {
-            get { return model.Beats[index]; }
+            get { return _beats[_index]; }
             set
             {
-                model.Beats[index] = value;
-                model.RaiseBeatsChanged();
+                _beats[_index] = value;
+                _pattern.RaiseBeatsChanged();
             }
         }
 
-        public int Location { get { return BeatLength * index; } }
+        public int BeatLength { get { return _pattern.BeatLength; } }
+
+        public int Location { get { return BeatLength * _index; } }
     }
 }

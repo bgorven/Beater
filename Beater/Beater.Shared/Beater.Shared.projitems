@@ -18,7 +18,10 @@
     <Compile Include="$(MSBuildThisFileDirectory)Audio\Sample.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Audio\SongSampleProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Audio\TrackSampleProvider.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Views\CanvasItemsControl.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SampleData\WaveSampleData.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Views\CanvasItemsControl.xaml.cs">
+      <DependentUpon>CanvasItemsControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Views\Command.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Views\Converters.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logger.cs" />
@@ -31,5 +34,32 @@
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\SongViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\TrackViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\ViewModelBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Views\WaveLine.xaml.cs">
+      <DependentUpon>WaveLine.xaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="$(MSBuildThisFileDirectory)Views\CanvasItemsControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Views\WaveLine.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="$(MSBuildThisFileDirectory)Assets\Closed Hat.wav" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\Crash Cymbal.wav" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\Floor Tom.wav" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\Kick.wav" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\Mid Hat.wav" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\Mid Tom.wav" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\Open Hat 1.wav" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\Open Hat 2.wav" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\Ride Cymbal.wav" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\Sample 1.wav" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\Sample 2.wav" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\Sound License.txt" />
   </ItemGroup>
 </Project>

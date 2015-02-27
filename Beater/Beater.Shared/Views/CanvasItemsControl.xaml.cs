@@ -7,8 +7,13 @@ using Windows.UI.Xaml.Data;
 
 namespace Beater.Views
 {
-    class CanvasItemsControl : ItemsControl
+    partial class CanvasItemsControl : ItemsControl
     {
+        public CanvasItemsControl()
+        {
+            this.InitializeComponent();
+        }
+
         public string BindingPathLeft { get; set; }
         public string BindingPathTop { get; set; }
         public string BindingPathZ { get; set; }
@@ -32,7 +37,7 @@ namespace Beater.Views
 
             base.PrepareContainerForItemOverride(element, item);
         }
-        
+
 
         private static void TryBind(FrameworkElement contentControl, DependencyProperty property, string BindingPath, IValueConverter Converter)
         {

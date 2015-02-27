@@ -42,7 +42,6 @@ namespace Beater.Models
             set
             {
                 Template.Beats = value;
-                Template.RaisePropertyChanged("Beats");
             }
         }
 
@@ -52,17 +51,15 @@ namespace Beater.Models
             set
             {
                 Template.Id = value;
-                Template.RaisePropertyChanged("Id");
             }
         }
 
-        public int BPM
+        public double BPM
         {
             get { return Template.BPM; }
             set
             {
                 Template.BPM = value;
-                Template.RaisePropertyChanged("BPM");
             }
         }
 
@@ -75,10 +72,22 @@ namespace Beater.Models
         {
             if (PropertyChanged != null && args != null)
             {
-                PropertyChanged(this, args);
+                PropertyChanged(this, new PropertyChangedEventArgs(args.PropertyName));
             }
         }
 
-        public int Location { get; set; }
+        private Sample.Count _location;
+        public int Location
+        {
+            get { return _location; }
+            set
+            {
+                _location = value;
+                if (PropertyChanged != null)
+                {
+                    PropertyChanged(this, new PropertyChangedEventArgs("Location"));
+                }
+            }
+        }
     }
 }

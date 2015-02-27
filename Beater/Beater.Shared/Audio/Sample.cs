@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Beater.Audio
 {
-    static class Sample
+    public static class Sample
     {
         /// <summary>
         /// Raw number of samples per second (base sample rate * number of channels)

@@ -15,20 +15,13 @@
     </UserControl.DataContext>
 
     <view:CanvasItemsControl ItemsSource="{Binding Beats}" BindingPathLeft="Location" BindingConverterPosition="{StaticResource SamplesToPixelsConverter}"
-                             Width="{Binding Measure, Converter={StaticResource SamplesToPixelsConverter}}">
-        <view:CanvasItemsControl.ItemsPanel>
-            <ItemsPanelTemplate>
-                <Canvas Height="25">
-                    <Canvas.Background>
-                        <LinearGradientBrush EndPoint="0,0.5" StartPoint="1,0.5">
-                            <GradientStop Color="DarkMagenta"  Offset="0"/>
-                            <GradientStop Color="Black" Offset="1"/>
-                        </LinearGradientBrush>
-                    </Canvas.Background>
-                </Canvas>
-            </ItemsPanelTemplate>
-        </view:CanvasItemsControl.ItemsPanel>
-
+                             Width="{Binding Measure, Converter={StaticResource SamplesToPixelsConverter}}" Height="25">
+        <view:CanvasItemsControl.Background>
+            <LinearGradientBrush EndPoint="0,0.5" StartPoint="1,0.5">
+                <GradientStop Color="DarkMagenta"  Offset="0"/>
+                <GradientStop Color="Black" Offset="1"/>
+            </LinearGradientBrush>
+        </view:CanvasItemsControl.Background>
         <view:CanvasItemsControl.ItemTemplate>
             <DataTemplate>
                 <ToggleButton IsChecked="{Binding Beats, Mode=TwoWay}" Margin="2"

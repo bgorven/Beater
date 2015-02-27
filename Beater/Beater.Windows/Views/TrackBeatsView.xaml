@@ -8,7 +8,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     d:DesignHeight="100"
-    d:DesignWidth="4000">
+    d:DesignWidth="1000">
     
     <d:UserControl.DataContext>
         <viewmodel:TrackViewModel />
@@ -17,15 +17,10 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="25"/>
-            <RowDefinition Height="75"/>
+            <RowDefinition Height="25"/>
         </Grid.RowDefinitions>
-        <view:CanvasItemsControl ItemsSource="{Binding Pattern}" Grid.Row="0" Height="25" 
+        <view:CanvasItemsControl ItemsSource="{Binding Pattern}" Grid.Row="0" Height="25"
                                  BindingPathLeft="Location" BindingConverterPosition="{StaticResource SamplesToPixelsConverter}">
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <Canvas />
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
 
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
