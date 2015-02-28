@@ -16,7 +16,7 @@
     </UserControl.DataContext>
 
     <view:CanvasItemsControl ItemsSource="{Binding Beats}" BindingPathLeft="Location" BindingConverterPosition="{StaticResource SamplesToPixelsConverter}"
-                             Width="{Binding Measure, Converter={StaticResource SamplesToPixelsConverter}}" Height="25">
+                             Width="{Binding Measure, Converter={StaticResource SamplesToPixelsConverter}}" Height="55">
         <view:CanvasItemsControl.Background>
             <LinearGradientBrush EndPoint="0,0.5" StartPoint="1,0.5">
                 <GradientStop Color="{Binding Id}"  Offset="0"/>

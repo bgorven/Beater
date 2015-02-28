@@ -77,7 +77,7 @@ namespace Beater.Models
         private bool[] _beats;
         public bool[] Beats { get { return _beats; } set { _beats = value; } }
 
-        private static readonly StringToColorConverter colorConverter = new StringToColorConverter();
+        private static readonly ColorConverter colorConverter = new ColorConverter();
         public Brush Color
         {
             get { return new SolidColorBrush((Color)colorConverter.Convert(_id, null, null, null)); }

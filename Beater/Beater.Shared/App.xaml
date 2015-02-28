@@ -32,5 +32,14 @@
                 <Visibility>Collapsed</Visibility>
             </local:Comparer.Default>
         </local:Comparer>
+        <local:TimeConverter Type="TimeSpan" x:Key="TimeSpanConverter" >
+            <x:String>%m\:ss\.fff</x:String>
+            <x:String>%m\:ss\.FFFFFFF</x:String>
+            <x:String>%s\.FFFFFFF</x:String>
+            <x:String>%s</x:String>
+            <x:String>%m\:ss</x:String>
+            <x:String>%h\:%m\:ss\.FFFFFFF</x:String>
+            <x:String>\.FFFFFFF</x:String>
+        </local:TimeConverter>
     </Application.Resources>
 </Application>

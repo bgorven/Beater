@@ -19,7 +19,7 @@
             <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
-        <view:CanvasItemsControl ItemsSource="{Binding Pattern}" Grid.Row="0" Height="25"
+        <view:CanvasItemsControl ItemsSource="{Binding Pattern}" Grid.RowSpan="2" Height="55"
                                  BindingPathLeft="Location" BindingConverterPosition="{StaticResource SamplesToPixelsConverter}">
 
             <ItemsControl.ItemTemplate>
@@ -34,7 +34,7 @@
             <TextBlock Text="/" FontSize="18" VerticalAlignment="Center" />
             <TextBox Text="{Binding CurrentTemplate.TimingDenominator, Mode=TwoWay}" FontSize="14" VerticalAlignment="Center"/>
             <TextBlock Text="+" FontSize="18" VerticalAlignment="Center" />
-            <TextBox Text="{Binding OffsetTime, Mode=TwoWay}" FontSize="14" VerticalAlignment="Center"/>
+            <TextBox Text="{Binding OffsetTime, Mode=TwoWay, Converter={StaticResource TimeSpanConverter}}" FontSize="14" VerticalAlignment="Center"/>
             <Rectangle Fill="{Binding CurrentTemplate.Id}" Height="25" Width="25" Margin="4,0,2,0" />
             <TextBox Text="{Binding CurrentTemplate.Id, Mode=TwoWay}" FontSize="14" VerticalAlignment="Center"/>
         </StackPanel>

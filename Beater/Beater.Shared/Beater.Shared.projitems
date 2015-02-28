@@ -19,8 +19,9 @@
     <Compile Include="$(MSBuildThisFileDirectory)Audio\SongSampleProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Audio\TrackSampleProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\Comparer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converters\TimeConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\NumericScaleConverter.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Converters\StringToColorConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converters\ColorConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SampleData\WaveSampleData.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Views\CanvasItemsControl.xaml.cs">
       <DependentUpon>CanvasItemsControl.xaml</DependentUpon>
