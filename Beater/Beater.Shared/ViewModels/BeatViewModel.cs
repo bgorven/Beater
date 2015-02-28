@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Text;
 using System.Linq;
 using System.ComponentModel;
+using Windows.UI.Xaml.Media;
+using Beater.Audio;
 
 namespace Beater.ViewModels
 {
@@ -28,12 +30,15 @@ namespace Beater.ViewModels
         void pattern_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == "Beats") RaisePropertyChanged("Active");
+            else if (e.PropertyName == "Wave") RaisePropertyChanged("Wave");
+            else if (e.PropertyName == "Color") RaisePropertyChanged("Color");
+            else if (e.PropertyName == "BeatLength") RaisePropertyChanged(new string[] { "BeatLength", "Location" });
         }
 
         private Pattern _pattern;
         private bool[] _beats;
 
-        public int Index { get; set; }
+        public int Index { get; private set; }
 
         public bool Active
         {
@@ -47,8 +52,10 @@ namespace Beater.ViewModels
 
         public float[] Wave { get { return _pattern.Wave == null ? new float[0] : _pattern.Wave.Samples; } }
 
-        public int BeatLength { get { return _pattern.BeatLength; } }
+        public Brush Color { get { return _pattern.Color; } }
 
-        public int Location { get { return BeatLength * Index; } }
+        public Sample.Count BeatLength { get { return _pattern.BeatLength; } }
+
+        public Sample.Count Location { get { return BeatLength * Index; } }
     }
 }

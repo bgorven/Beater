@@ -88,7 +88,7 @@ namespace Beater.ViewModels
             }
         }
 
-        public int Length
+        public Sample.Count Length
         {
             get { return song.Length; }
         }
@@ -109,10 +109,10 @@ namespace Beater.ViewModels
         public ObservableCollection<TrackViewModel> Tracks { get; private set; }
 
         #region Audio
-        public int Progress { get; private set; }
+        public Sample.Count Progress { get; private set; }
         public TimeSpan PlayProgress
         {
-            get { return ((Sample.Count)Progress).Time(); }
+            get { return Progress.Time(); }
             set
             {
                 Progress = value.Samples();
@@ -123,7 +123,7 @@ namespace Beater.ViewModels
         private IWavePlayer player;
         private SongSampleProvider provider;
 
-        internal void SetProgress(int p)
+        internal void SetProgress(Sample.Count p)
         {
             Progress = p % Length;
             if (UIThread != null)

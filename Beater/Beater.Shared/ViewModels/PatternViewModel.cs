@@ -1,4 +1,5 @@
-﻿using Beater.Models;
+﻿using Beater.Audio;
+using Beater.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -6,6 +7,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using Windows.UI;
+using Windows.UI.Xaml.Media;
 
 namespace Beater.ViewModels
 {
@@ -36,11 +38,11 @@ namespace Beater.ViewModels
 
         
 
-        public int BeatLength { get { return pattern.BeatLength; } }
-        public int Measure { get { return pattern.Measure; } }
+        public Sample.Count BeatLength { get { return pattern.BeatLength; } }
+        public Sample.Count Measure { get { return pattern.Measure; } }
         public ObservableCollection<BeatViewModel> Beats { get; private set; }
-        public Color Id { get { return pattern.Id; } set { pattern.Id = value; } }
-        public int Location { get { return pattern.Location; } set { pattern.Location = value; } }
+        public Brush Id { get { return pattern.Color; } set { pattern.Color = value; } }
+        public Sample.Count Location { get { return pattern.Location; } set { pattern.Location = value; } }
         public PatternTemplate Template { get { return pattern.Template; } set { pattern.Template = value; } }
     }
 }

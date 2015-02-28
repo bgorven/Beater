@@ -5,6 +5,7 @@ using System.Text;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Data;
 using System.Linq;
+using Beater.Audio;
 
 namespace Beater.Views
 {
@@ -66,6 +67,7 @@ namespace Beater.Views
             if (value is float) return (float)value * scale;
             if (value is double) return (double)value * scale;
             if (value is decimal) return (decimal)value * (decimal)scale;
+            if (value is Sample.Count) return (Sample.Count)value * scale;
             return value;
         }
 
@@ -101,6 +103,7 @@ namespace Beater.Views
             if (value is float) return (float)value / scale;
             if (value is double) return (double)value / scale;
             if (value is decimal) return (decimal)value / (decimal)scale;
+            if (value is Sample.Count) return (Sample.Count)value / scale;
             return value;
         }
     }

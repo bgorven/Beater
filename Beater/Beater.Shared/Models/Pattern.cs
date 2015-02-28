@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
 using Windows.UI;
+using Windows.UI.Xaml.Media;
 
 namespace Beater.Models
 {
@@ -49,10 +50,10 @@ namespace Beater.Models
             set { Template.Wave = value; }
         }
 
-        public Color Id
+        public Brush Color
         {
-            get { return Template.Id; }
-            set { Template.Id = value; }
+            get { return Template.Color; }
+            set { Template.Color = value; }
         }
 
         public double BPM
@@ -75,7 +76,7 @@ namespace Beater.Models
         }
 
         private Sample.Count _location;
-        public int Location
+        public Sample.Count Location
         {
             get { return _location; }
             set

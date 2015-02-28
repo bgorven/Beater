@@ -33,14 +33,6 @@ namespace Beater.Views
             set { SetValue(WaveProperty, value); }
         }
 
-        public static readonly DependencyProperty PointsProperty = DependencyProperty.Register("Points", typeof(PointCollection), typeof(WaveLine), new PropertyMetadata(new PointCollection()));
-
-        public PointCollection Points
-        {
-            get { return (PointCollection)GetValue(PointsProperty); }
-            set { SetValue(PointsProperty, value); }
-        }
-
         public static readonly DependencyProperty SamplesToPixelsConverterProperty = DependencyProperty.Register("SamplesToPixelsConverter", typeof(NumericScaleConverter), typeof(WaveLine), new PropertyMetadata(null, UpdatePoints));
 
         public NumericScaleConverter SamplesToPixelsConverter
@@ -49,38 +41,46 @@ namespace Beater.Views
             set { SetValue(SamplesToPixelsConverterProperty, value); }
         }
 
+        public static readonly DependencyProperty YScaleProperty = DependencyProperty.Register("YScale", typeof(double), typeof(WaveLine), new PropertyMetadata(1.0, UpdatePoints));
+
+        public double YScale
+        {
+            get { return (double)GetValue(YScaleProperty); }
+            set { SetValue(YScaleProperty, value); }
+        }
+
         private static async void UpdatePoints(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
+            
             var w = d as WaveLine;
             
             if (w != null && w.SamplesToPixelsConverter != null)
             {
                 var wave = w.Wave ?? new Beater.SampleData.WaveSampleData().Points;
-                var scale = w.SamplesToPixelsConverter.Scale;
-                var sampleWave = new Beater.SampleData.WaveSampleData();
-
+                var xScale = (float)w.SamplesToPixelsConverter.Scale;
+                var yScale = (float)w.YScale;
 
                 var points = new PointCollection();
-                foreach (var point in await Task.Run(() => Update(wave, scale)))
+                foreach (var point in await Task.Run(() => Update(wave, xScale, yScale)))
                 {
                     points.Add(point);
                 }
-                w.Points = points;
+
                 w.PolyBezier.Clear();
                 w.PolyBezier.Add(new PolyBezierSegment() { Points = points });
             }
         }
 
-        private static List<Point> Update(float[] wave, double scale)
+        private static List<Point> Update(float[] wave, float xScale, float yScale)
         {
-            var count = (int)(wave.Length * scale);
+            var count = (int)(wave.Length * xScale);
             var pixels = new float[count];
             var list = new List<Point>();
 
             float max = 0;
             for (int i = 0, j = 0; i < count; i++){
                 float blockMax = 0;
-                for (  ; j * scale < i+1 && j < wave.Length; j++){
+                for (  ; j * xScale < i+1 && j < wave.Length; j++){
                     blockMax = Math.Max(wave[j], blockMax);
                 }
                 max = Math.Max(max, blockMax);
@@ -88,7 +88,7 @@ namespace Beater.Views
             }
 
             Point prev = new Point(0,0);
-            foreach (var curr in FindInflectionPoints(pixels, 25/max))
+            foreach (var curr in FindInflectionPoints(pixels, yScale/max))
             {
                 var centerX = (prev.X + curr.X)/2;
                 var control0 = new Point(centerX, prev.Y);

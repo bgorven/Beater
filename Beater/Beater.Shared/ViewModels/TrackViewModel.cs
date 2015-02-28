@@ -97,7 +97,7 @@ namespace Beater.ViewModels
             }
         }
 
-        public int Length
+        public Sample.Count Length
         {
             get { return track.Length; }
             set
@@ -181,7 +181,7 @@ namespace Beater.ViewModels
             if (!PendingChanges) return;
             ClearChanges();
 
-            int location = 0;
+            var location = Offset;
             foreach (var pattern in Pattern)
             {
                 pattern.Location = location;

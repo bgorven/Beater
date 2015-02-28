@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
-using Windows.UI;
+using Windows.UI.Xaml.Media;
 
 namespace Beater.Models
 {
@@ -20,7 +20,7 @@ namespace Beater.Models
             _bpm = BPM;
             var color = new byte[3];
             _rand.NextBytes(color);
-            Id = Windows.UI.Color.FromArgb(0, color[0], color[1], color[2]);
+            _color = new SolidColorBrush(Windows.UI.Color.FromArgb(255, color[0], color[1], color[2]));
             PendingChanges = true;
         }
 
@@ -74,14 +74,15 @@ namespace Beater.Models
         public Sample.Count Measure { get { return (Sample.Count)((((240.0 / _bpm) / _timingDenominator) * _timingNumerator) * Sample.SamplesPerSecond); } }
         private bool[] _beats;
         public bool[] Beats { get { return _beats; } set { _beats = value; } }
-        private Color _id;
-        public Color Id
+
+        private Brush _color;
+        public Brush Color
         {
-            get { return _id; }
+            get { return _color; }
             set
             {
-                _id = value;
-                RaisePropertyChanged("Id");
+                _color = value;
+                RaisePropertyChanged("Color");
             }
         }
 
