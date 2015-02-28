@@ -35,12 +35,12 @@
         </Grid.ColumnDefinitions>
 
         <StackPanel Orientation="Horizontal" Margin="5">
-            <Button Command="{Binding PlayCommand}">Play</Button>
-            <Button Command="{Binding PauseCommand}">Pause</Button>
-            <Button Command="{Binding StopCommand}">Stop</Button>
-            <Button Command="{Binding SaveCommand}">Save</Button>
-            <Button Command="{Binding TrashCommand}">Trash</Button>
             <TextBox Text="{Binding Title, Mode=TwoWay}" VerticalAlignment="Center" Margin="1,0"/>
+            <Button Command="{Binding PlayCommand}" FontFamily="Segoe UI Symbol">&#xe102;</Button>
+            <Button Command="{Binding PauseCommand}" FontFamily="Segoe UI Symbol">&#xe103;</Button>
+            <Button Command="{Binding StopCommand}" FontFamily="Segoe UI Symbol">&#xe15b;</Button>
+            <Button Command="{Binding SaveCommand}" FontFamily="Segoe UI Symbol">&#xe105;</Button>
+            <Button Command="{Binding TrashCommand}" FontFamily="Segoe UI Symbol">&#xe107;</Button>
             <TextBox Text="{Binding BPM, Mode=TwoWay}" VerticalAlignment="Center" Margin="1,0"/>
             <TextBox Text="{Binding PlayProgress, Mode=TwoWay, Converter={StaticResource TimeSpanConverter}}" VerticalAlignment="Center" Margin="1,0"/>
             <TextBox Text="{Binding Time, Mode=TwoWay, Converter={StaticResource TimeSpanConverter}}" VerticalAlignment="Center" Margin="1,0"/>
@@ -94,7 +94,7 @@
                         <x:String>Sample 1</x:String>
                         <x:String>Sample 2</x:String>
                     </ComboBox>
-                    <Button Command="{Binding AddTrackCommand}">+</Button>
+                    <Button Command="{Binding AddTrackCommand}" FontFamily="Segoe UI Symbol">&#xe109;</Button>
                 </StackPanel>
             </Grid>
         </ScrollViewer>
