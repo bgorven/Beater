@@ -18,7 +18,7 @@ namespace Beater.ViewModels
         public TrackViewModel() : this(new Track())
         {
             UpdatePattern();
-            Pattern[0].Beats[1].Beats = true;
+            Pattern[0].Beats[1].Active = true;
         }
 
         public TrackViewModel(Track model)
@@ -115,7 +115,8 @@ namespace Beater.ViewModels
             set
             {
                 track.Wave = value;
-                RaisePropertyChanged("Wave");
+                foreach (var t in Templates) t.Wave = value;
+                //Redundant RaisePropertyChanged("Wave");
             }
         }
 
@@ -128,18 +129,21 @@ namespace Beater.ViewModels
                 RaisePropertyChanged("OriginalWave");
             }
         }
+
+        public IList<PatternTemplate> Templates { get { return track.Templates; } }
+
         #endregion
 
         private bool _pendingChanges;
         public bool PendingChanges
         {
-            get { return _pendingChanges || track.Templates.Any(t => t.PendingChanges); }
+            get { return _pendingChanges || Templates.Any(t => t.PendingChanges); }
         }
         public void SetChanges() { _pendingChanges = true; }
         public void ClearChanges()
         {
             _pendingChanges = false;
-            foreach (var t in track.Templates) t.PendingChanges = false;
+            foreach (var t in Templates) t.PendingChanges = false;
         }
 
         private string _previousFileName = null;
@@ -164,14 +168,14 @@ namespace Beater.ViewModels
 
         public void UpdatePattern()
         {
-            foreach (var template in track.Templates)
+            foreach (var template in Templates)
             {
                 if (template.BPM != BPM) template.BPM = BPM;
             }
-            if (track.Templates.Count == 0)
+            if (Templates.Count == 0)
             {
                 AddTemplate();
-                CurrentTemplate = track.Templates[0];
+                CurrentTemplate = Templates[0];
             }
 
             if (!PendingChanges) return;
@@ -186,7 +190,7 @@ namespace Beater.ViewModels
 
             while (location < Length)
             {
-                var pattern = new Pattern(track.Templates[0]);
+                var pattern = new Pattern(Templates[0]);
                 track.Pattern.Add(pattern);
                 Pattern.Add(new PatternViewModel(pattern) { Location = location });
                 location += pattern.Measure;
@@ -197,7 +201,7 @@ namespace Beater.ViewModels
         {
             var template = new PatternTemplate(BPM);
             template.PropertyChanged += TrackViewModel_PropertyChanged;
-            track.Templates.Add(template);
+            Templates.Add(template);
         }
 
         private Sample.Provider UpdateWave(Sample.Provider original)

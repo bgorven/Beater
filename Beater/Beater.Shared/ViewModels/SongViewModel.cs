@@ -42,7 +42,7 @@ namespace Beater.ViewModels
                 song.Tracks.Add(new Track(defaultWave, Length, 0, BPM));
                 Tracks.Add(new TrackViewModel(song.Tracks[0]));
                 Tracks[0].UpdatePattern();
-                Tracks[0].Pattern[0].Beats[0].Beats = true;
+                Tracks[0].Pattern[0].Beats[0].Active = true;
             }
 
             try

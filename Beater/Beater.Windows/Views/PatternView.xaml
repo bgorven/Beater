@@ -22,12 +22,10 @@
                 <GradientStop Color="Black" Offset="1"/>
             </LinearGradientBrush>
         </view:CanvasItemsControl.Background>
+        
         <view:CanvasItemsControl.ItemTemplate>
             <DataTemplate>
-                <ToggleButton IsChecked="{Binding Beats, Mode=TwoWay}" Margin="2"
-                              Width="{Binding BeatLength, Converter={StaticResource SamplesToPixelsConverter}}">
-                    <Image />
-                </ToggleButton>
+                <view:BeatView />
             </DataTemplate>
         </view:CanvasItemsControl.ItemTemplate>
     </view:CanvasItemsControl>

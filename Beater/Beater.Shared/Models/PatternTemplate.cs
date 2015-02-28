@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using Windows.UI;
 
 namespace Beater.Models
 {
@@ -19,10 +20,19 @@ namespace Beater.Models
             _bpm = BPM;
             var color = new byte[3];
             _rand.NextBytes(color);
-            Id = Windows.UI.Color.FromArgb(0, color[0], color[1], color[2]).ToString();
+            Id = Windows.UI.Color.FromArgb(0, color[0], color[1], color[2]);
             PendingChanges = true;
         }
 
+        private Sample.Provider _wave;
+        public Sample.Provider Wave { 
+            get { return _wave; }
+            set
+            {
+                _wave = value;
+                RaisePropertyChanged("Wave");
+            }
+        }
 
         private static readonly Random _rand = new Random();
 
@@ -64,8 +74,8 @@ namespace Beater.Models
         public Sample.Count Measure { get { return (Sample.Count)((((240.0 / _bpm) / _timingDenominator) * _timingNumerator) * Sample.SamplesPerSecond); } }
         private bool[] _beats;
         public bool[] Beats { get { return _beats; } set { _beats = value; } }
-        private string _id;
-        public string Id
+        private Color _id;
+        public Color Id
         {
             get { return _id; }
             set

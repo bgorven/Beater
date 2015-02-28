@@ -23,7 +23,7 @@ namespace Beater.Audio
                 var patternEnd = location + pattern.Measure;
                 foreach (var beat in pattern.Beats)
                 {
-                    if (beat.Beats)
+                    if (beat.Active)
                     {
                         var startOffset = location - bufStart;
                         var samplesAvailable = _track.Wave.Samples.Length - startOffset;

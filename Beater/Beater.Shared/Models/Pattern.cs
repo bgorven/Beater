@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
+using Windows.UI;
 
 namespace Beater.Models
 {
@@ -39,28 +40,25 @@ namespace Beater.Models
         public bool[] Beats
         {
             get { return Template.Beats; }
-            set
-            {
-                Template.Beats = value;
-            }
+            set { Template.Beats = value; }
         }
 
-        public string Id
+        public Sample.Provider Wave
+        {
+            get { return Template.Wave; }
+            set { Template.Wave = value; }
+        }
+
+        public Color Id
         {
             get { return Template.Id; }
-            set
-            {
-                Template.Id = value;
-            }
+            set { Template.Id = value; }
         }
 
         public double BPM
         {
             get { return Template.BPM; }
-            set
-            {
-                Template.BPM = value;
-            }
+            set { Template.BPM = value; }
         }
 
         internal void RaiseBeatsChanged()

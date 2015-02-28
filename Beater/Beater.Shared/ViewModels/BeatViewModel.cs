@@ -9,35 +9,46 @@ namespace Beater.ViewModels
 {
     class BeatViewModel : ViewModelBase
     {
+
         public static IEnumerable<BeatViewModel> BeatPattern(Pattern beat)
         {
             return beat.Beats.Select((b, i) => new BeatViewModel(beat, i));
         }
 
-        private BeatViewModel(Pattern pattern, int number)
+        public BeatViewModel() : this(new Pattern(new PatternTemplate()), 0) { }
+
+        private BeatViewModel(Pattern pattern, int index)
         {
             _pattern = pattern;
             _beats = pattern.Beats;
-            _index = number;
-            pattern.PropertyChanged += PropagatePropertyChanged;
+            Index = index;
+            pattern.PropertyChanged += pattern_PropertyChanged;
+        }
+
+        void pattern_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "Beats") RaisePropertyChanged("Active");
         }
 
         private Pattern _pattern;
         private bool[] _beats;
-        private int _index;
 
-        public bool Beats
+        public int Index { get; set; }
+
+        public bool Active
         {
-            get { return _beats[_index]; }
+            get { return _beats[Index]; }
             set
             {
-                _beats[_index] = value;
+                _beats[Index] = value;
                 _pattern.RaiseBeatsChanged();
             }
         }
 
+        public float[] Wave { get { return _pattern.Wave == null ? new float[0] : _pattern.Wave.Samples; } }
+
         public int BeatLength { get { return _pattern.BeatLength; } }
 
-        public int Location { get { return BeatLength * _index; } }
+        public int Location { get { return BeatLength * Index; } }
     }
 }
