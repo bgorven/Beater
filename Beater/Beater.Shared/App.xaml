@@ -6,8 +6,31 @@
     
     <Application.Resources>
         <local:NumericScaleConverter Scale="0.00048828125"  x:Key="SamplesToPixelsConverter" />
-        <local:BooleanInverter x:Key="BooleanInverter" />
-        <local:BooleanToVisibilityConverter x:Key="VisibilityConverter" />
-        <local:BooleanToVisibilityConverter Invert="true" x:Key="InverseVisibilityConverter" />
+        <local:Comparer x:Key="VisibilityConverter">
+            <local:ComparerItem>
+                <local:ComparerItem.CompareTo>
+                    <x:Boolean>True</x:Boolean>
+                </local:ComparerItem.CompareTo>
+                <local:ComparerItem.ResultIfEqual>
+                    <Visibility>Visible</Visibility>
+                </local:ComparerItem.ResultIfEqual>
+            </local:ComparerItem>
+            <local:Comparer.Default>
+                <Visibility>Collapsed</Visibility>
+            </local:Comparer.Default>
+        </local:Comparer>
+        <local:Comparer x:Key="InverseVisibilityConverter">
+            <local:ComparerItem>
+                <local:ComparerItem.CompareTo>
+                    <x:Boolean>False</x:Boolean>
+                </local:ComparerItem.CompareTo>
+                <local:ComparerItem.ResultIfEqual>
+                    <Visibility>Visible</Visibility>
+                </local:ComparerItem.ResultIfEqual>
+            </local:ComparerItem>
+            <local:Comparer.Default>
+                <Visibility>Collapsed</Visibility>
+            </local:Comparer.Default>
+        </local:Comparer>
     </Application.Resources>
 </Application>

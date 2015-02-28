@@ -9,43 +9,47 @@ using Beater.Audio;
 
 namespace Beater.Views
 {
-    public class BooleanToVisibilityConverter : IValueConverter
+    [Windows.UI.Xaml.Markup.ContentProperty(Name="Comparisons")]
+    public class Comparer : IValueConverter
     {
-        public bool Invert { get; set; }
+        public object Default { get; set; }
+
+        public List<ComparerItem> Comparisons { get; set; }
 
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            return NotFalseOrNull(value) ^ Invert ? Visibility.Visible : Visibility.Collapsed;
-        }
+            foreach (var c in Comparisons)
+            {
+                if (c.Compare(value, c.CompareTo)) return c.ResultIfEqual;
+            }
 
-        protected static bool NotFalseOrNull(object value)
-        {
-            if (value is bool)
-            {
-                return (bool)value;
-            }
-            else
-            {
-                return value != null;
-            }
+            return Default;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)
         {
-            return value.Equals(Visibility.Visible) ^ Invert;
+            foreach (var c in Comparisons)
+            {
+                if (c.Compare(value, c.ResultIfEqual)) return c.ResultIfEqual;
+            }
+
+            return Default;
         }
     }
 
-    public class BooleanInverter : IValueConverter
+    public class ComparerItem
     {
-        public object Convert(object value, Type targetType, object parameter, string language)
-        {
-            return !(bool)value;
-        }
+        public object CompareTo { get; set; }
 
-        public object ConvertBack(object value, Type targetType, object parameter, string language)
+        public object ResultIfEqual { get; set; }
+
+        public bool ReferenceEquality { get; set; }
+
+        public bool Compare(object left, object right)
         {
-            return !(bool)value;
+            if (ReferenceEquality) return left == right;
+            else if (left == null) return right == null;
+            else return left.Equals(right);
         }
     }
 
