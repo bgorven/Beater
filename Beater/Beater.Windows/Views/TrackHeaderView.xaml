@@ -16,21 +16,10 @@
 
     <Grid Name="RootGrid">
         <Grid.RowDefinitions>
-            <RowDefinition Height="25" />
-            <RowDefinition Height="auto" />
+            <RowDefinition Height="30" />
+            <RowDefinition Height="30" />
         </Grid.RowDefinitions>
         <TextBox Text="{Binding Name, Mode=TwoWay}" VerticalAlignment="Center" FontSize="16" Grid.Row="0" />
         <Rectangle Grid.Row="1" Height="{Binding Height}" />
-        <Canvas Width="2" Height="25" Background="Blue" HorizontalAlignment="Right" VerticalAlignment="Top" Grid.Row="1" >
-            <StackPanel Canvas.Left="0" Canvas.Top="0" Orientation="Horizontal" SizeChanged="TemplateContainer_SizeChanged">
-                <TextBox Text="{Binding CurrentTemplate.TimingNumerator, Mode=TwoWay}" FontSize="14" />
-                <TextBlock Text="/" FontSize="14" VerticalAlignment="Center" />
-                <TextBox Text="{Binding CurrentTemplate.TimingDenominator, Mode=TwoWay}" FontSize="14"/>
-                <TextBlock Text="+" FontSize="14" VerticalAlignment="Center" />
-                <TextBox Text="{Binding OffsetTime, Mode=TwoWay}" FontSize="14"/>
-                <Rectangle Fill="{Binding CurrentTemplate.Id}" Height="25" Width="25" Margin="4,0,2,0" />
-                <TextBox Text="{Binding CurrentTemplate.Id}" FontSize="14"/>
-            </StackPanel>
-        </Canvas>
     </Grid>
 </UserControl>

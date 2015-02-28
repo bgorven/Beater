@@ -36,12 +36,11 @@ namespace Beater.ViewModels
             base.PropagatePropertyChanged(sender, e);
         }
 
-        
-
         public Sample.Count BeatLength { get { return pattern.BeatLength; } }
         public Sample.Count Measure { get { return pattern.Measure; } }
         public ObservableCollection<BeatViewModel> Beats { get; private set; }
-        public Brush Id { get { return pattern.Color; } set { pattern.Color = value; } }
+        public String Id { get { return pattern.Id; } set { pattern.Id = value; } }
+        public Brush Color { get { return pattern.Color; } }
         public Sample.Count Location { get { return pattern.Location; } set { pattern.Location = value; } }
         public PatternTemplate Template { get { return pattern.Template; } set { pattern.Template = value; } }
     }

@@ -134,6 +134,19 @@ namespace Beater.ViewModels
 
         #endregion
 
+        public ObservableCollection<PatternViewModel> Pattern { get; private set; }
+
+        private double _height;
+        public double Height
+        {
+            get { return _height; }
+            set
+            {
+                _height = value;
+                RaisePropertyChanged("Height");
+            }
+        }
+
         private bool _pendingChanges;
         public bool PendingChanges
         {
@@ -231,19 +244,6 @@ namespace Beater.ViewModels
             newBufSize = processed.Read(newBuf, 0, newBufSize);
             Array.Resize(ref newBuf, newBufSize);
             return new Sample.Provider(newBuf, Sample.WaveFormat);
-        }
-
-        public ObservableCollection<PatternViewModel> Pattern { get; private set; }
-
-        private double _height;
-        public double Height
-        {
-            get { return _height; }
-            set
-            {
-                _height = value;
-                RaisePropertyChanged("Height");
-            }
         }
     }
 }

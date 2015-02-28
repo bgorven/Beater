@@ -19,8 +19,8 @@
                              Width="{Binding Measure, Converter={StaticResource SamplesToPixelsConverter}}" Height="25">
         <view:CanvasItemsControl.Background>
             <LinearGradientBrush EndPoint="0,0.5" StartPoint="1,0.5">
-                <GradientStop Color="DarkMagenta"  Offset="0"/>
-                <GradientStop Color="Black" Offset="1"/>
+                <GradientStop Color="{Binding Id}"  Offset="0"/>
+                <GradientStop Color="Transparent" Offset="1"/>
             </LinearGradientBrush>
         </view:CanvasItemsControl.Background>
         

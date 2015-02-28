@@ -50,10 +50,15 @@ namespace Beater.Models
             set { Template.Wave = value; }
         }
 
+        public String Id
+        {
+            get { return Template.Id; }
+            set { Template.Id = value; }
+        }
+
         public Brush Color
         {
             get { return Template.Color; }
-            set { Template.Color = value; }
         }
 
         public double BPM

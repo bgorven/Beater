@@ -16,8 +16,8 @@
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="25"/>
-            <RowDefinition Height="25"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
         <view:CanvasItemsControl ItemsSource="{Binding Pattern}" Grid.Row="0" Height="25"
                                  BindingPathLeft="Location" BindingConverterPosition="{StaticResource SamplesToPixelsConverter}">
@@ -28,5 +28,15 @@
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </view:CanvasItemsControl>
+        
+        <StackPanel Grid.Row="1" Orientation="Horizontal">
+            <TextBox Text="{Binding CurrentTemplate.TimingNumerator, Mode=TwoWay}" FontSize="14" VerticalAlignment="Center" FlowDirection="RightToLeft"/>
+            <TextBlock Text="/" FontSize="18" VerticalAlignment="Center" />
+            <TextBox Text="{Binding CurrentTemplate.TimingDenominator, Mode=TwoWay}" FontSize="14" VerticalAlignment="Center"/>
+            <TextBlock Text="+" FontSize="18" VerticalAlignment="Center" />
+            <TextBox Text="{Binding OffsetTime, Mode=TwoWay}" FontSize="14" VerticalAlignment="Center"/>
+            <Rectangle Fill="{Binding CurrentTemplate.Id}" Height="25" Width="25" Margin="4,0,2,0" />
+            <TextBox Text="{Binding CurrentTemplate.Id, Mode=TwoWay}" FontSize="14" VerticalAlignment="Center"/>
+        </StackPanel>
     </Grid>
 </UserControl>

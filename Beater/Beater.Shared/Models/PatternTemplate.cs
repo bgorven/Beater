@@ -1,9 +1,11 @@
 ﻿using Beater.Audio;
+using Beater.Converters;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using Windows.UI;
 using Windows.UI.Xaml.Media;
 
 namespace Beater.Models
@@ -20,7 +22,7 @@ namespace Beater.Models
             _bpm = BPM;
             var color = new byte[3];
             _rand.NextBytes(color);
-            _color = new SolidColorBrush(Windows.UI.Color.FromArgb(255, color[0], color[1], color[2]));
+            _id = Windows.UI.Color.FromArgb(255, color[0], color[1], color[2]).ToString();
             PendingChanges = true;
         }
 
@@ -75,14 +77,26 @@ namespace Beater.Models
         private bool[] _beats;
         public bool[] Beats { get { return _beats; } set { _beats = value; } }
 
-        private Brush _color;
+        private static readonly StringToColorConverter colorConverter = new StringToColorConverter();
         public Brush Color
         {
-            get { return _color; }
+            get { return new SolidColorBrush((Color)colorConverter.Convert(_id, null, null, null)); }
+        }
+
+        private string _id;
+        public string Id
+        {
+            get { return _id; }
             set
             {
-                _color = value;
-                RaisePropertyChanged("Color");
+                try
+                {
+                    colorConverter.Convert(value, null, null, null);
+                    _id = value;
+                    RaisePropertyChanged("Id");
+                    RaisePropertyChanged("Color" );
+                }
+                catch (Exception) { }
             }
         }
 

@@ -152,7 +152,7 @@ namespace Beater.ViewModels
             {
                 player = await Task.Run(() =>
                 {
-                    var p = new WasapiOutRT(NAudio.CoreAudioApi.AudioClientShareMode.Shared, 500);
+                    var p = new WasapiOutRT(NAudio.CoreAudioApi.AudioClientShareMode.Shared, 8);
                     p.Init(provider);
                     return p;
                 });
