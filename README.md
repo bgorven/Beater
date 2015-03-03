@@ -1,0 +1,1 @@
+Beater fills the gap between simple paint-by-numbers drum machines, where it can be hard to do anything with non-standard timing, and significantly more complex professional sequencers. The idea is to facilitate ‘rapid prototyping’ of real songs, by allowing beats to be laid out in any way conceivable, while still including the paint-by-numbers functionality seen in simpler apps.
